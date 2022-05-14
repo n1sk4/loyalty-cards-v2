@@ -7,8 +7,12 @@
         <entry key="..\:/_diplomskiRad/app/src/main/res/drawable/ic_baseline_credit_score_24.xml" value="0.358" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/drawable/ic_delete.xml" value="0.358" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add.xml" value="0.2814814814814815" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add_barcode.xml" value="0.36666666666666664" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add_logo.xml" value="0.36666666666666664" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_barcode.xml" value="0.36666666666666664" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_main.xml" value="0.2814814814814815" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_update.xml" value="0.1875" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/my_row.xml" value="0.36102564102564105" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/menu/update_item_menu.xml" value="0.2814814814814815" />
       </map>
     </option>
@@ -18,5 +22,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.36666666666666664" />
+      </ProjectState>
+    </option>
   </component>
 </project>
