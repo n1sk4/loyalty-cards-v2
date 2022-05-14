@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/_diplomskiRad/app/src/main/res/drawable/ic_add.xml" value="0.1635" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/drawable/ic_baseline_credit_score_24.xml" value="0.358" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/drawable/ic_delete.xml" value="0.358" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add.xml" value="0.2814814814814815" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_main.xml" value="0.2814814814814815" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_update.xml" value="0.1875" />
