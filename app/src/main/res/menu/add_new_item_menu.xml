@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/add_website"
+        android:title="Add website">
+    </item>
+    <item android:id="@+id/add_phone"
+        android:title="Add phone">
+    </item>
+</menu>

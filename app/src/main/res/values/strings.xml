@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">diplomski</string>
+    <string name="enter_store_name">Enter store name</string>
+    <string name="add_new_store">Add</string>
+    <string name="enter_store_phone">Enter store phone</string>
+    <string name="enter_store_website">Enter store website</string>
+    <string name="add_a_logo_button">Add a logo</string>
+    <string name="no_data_stored">You have no loyalty card stored</string>
+    <string name="enter_store_website_update">Enter store website</string>
+    <string name="phone_number_update">Enter phone number</string>
+    <string name="update_button">Update</string>
+    <string name="delete_button_update">Delete</string>
+    <string name="enter_store_name_update">Enter store name</string>
+    <string name="phone_number_txtView">120pgs</string>
+    <string name="store_web_txtView">www.web.com</string>
+    <string name="store_name_txtView">Store Name</string>
+    <string name="store_id_txtView">1</string>
+    <string name="update_logo_button">Update logo</string>
+    <string name="add_a_barcode">Add a barcode</string>
 </resources>
