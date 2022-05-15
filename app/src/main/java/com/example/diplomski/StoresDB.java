@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-public class StoreNamesDB extends SQLiteOpenHelper {
+public class StoresDB extends SQLiteOpenHelper {
 
     private Context context;
     private static final String DATABASE_NAME = "StoreNames.db";
@@ -20,7 +20,7 @@ public class StoreNamesDB extends SQLiteOpenHelper {
     private static final String COLUMN_STORE    = "store_name";
 
 
-    StoreNamesDB(@Nullable Context context) {
+    StoresDB(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }

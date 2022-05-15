@@ -53,7 +53,7 @@ public class AddActivity extends AppCompatActivity {
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StoreNamesDB myDB = new StoreNamesDB(AddActivity.this);
+                StoresDB myDB = new StoresDB(AddActivity.this);
                 if(store_input.getText().toString().length() <= 0){
                     store_input.setError("Store name field cannot be empty!");
                     Toast.makeText(AddActivity.this, "Store name field cannot be empty!", Toast.LENGTH_SHORT).show();

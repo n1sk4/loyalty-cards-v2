@@ -53,7 +53,7 @@ public class UpdateActivity extends AppCompatActivity {
         update_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                com.example.diplomski.StoreNamesDB myDB = new com.example.diplomski.StoreNamesDB(UpdateActivity.this);
+                StoresDB myDB = new StoresDB(UpdateActivity.this);
                 name = name_input.getText().toString().trim();
                 myDB.updateData(id, name);
                 ActionBar ab = getSupportActionBar();
@@ -98,7 +98,7 @@ public class UpdateActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                com.example.diplomski.StoreNamesDB myDB = new com.example.diplomski.StoreNamesDB(UpdateActivity.this);
+                StoresDB myDB = new StoresDB(UpdateActivity.this);
                 myDB.deleteOneRow(id);
                 myDB.updateData(id, name);
                 Intent intent = new Intent(UpdateActivity.this, com.example.diplomski.MainActivity.class);

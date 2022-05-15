@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     TextView no_data;
     ImageView no_data_imageView;
 
-    StoreNamesDB myDB;
+    StoresDB myDB;
     ArrayList<String> store_id, store_name;
 
     CustomAdapter customAdapter;
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        myDB = new StoreNamesDB(MainActivity.this);
+        myDB = new StoresDB(MainActivity.this);
         store_id = new ArrayList<>();
         store_name = new ArrayList<>();
 
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                StoreNamesDB myDB = new StoreNamesDB(MainActivity.this);
+                StoresDB myDB = new StoresDB(MainActivity.this);
                 myDB.deleteAllData();
                 recreate();
             }
