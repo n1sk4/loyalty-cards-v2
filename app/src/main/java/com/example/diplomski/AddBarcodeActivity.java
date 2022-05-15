@@ -1,5 +1,6 @@
 package com.example.diplomski;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +8,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,9 +23,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
+import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.common.InputImage;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -32,6 +43,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AddBarcodeActivity extends AppCompatActivity {
     Button captureImage_button;
@@ -101,8 +113,8 @@ public class AddBarcodeActivity extends AppCompatActivity {
             barcodeNumber_text.setError("Enter barcode manually field cannot be empty!");
             Toast.makeText(AddBarcodeActivity.this, "Enter barcode manually field cannot be empty!", Toast.LENGTH_SHORT).show();
         }
-        else if(barcodeNumber_text.getText().toString().trim().length() != 12 && !switchSelection){
-            Toast.makeText(AddBarcodeActivity.this, "Barcode must be 12 numbers long!", Toast.LENGTH_SHORT).show();
+        else if(barcodeNumber_text.getText().toString().trim().length() != 13 && !switchSelection){
+            Toast.makeText(AddBarcodeActivity.this, "Barcode must be 13 numbers long!", Toast.LENGTH_SHORT).show();
         }
         else {
             MultiFormatWriter writer = new MultiFormatWriter();
@@ -113,7 +125,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
                     Bitmap bitmap = encoder.createBitmap(matrix);
                     barcode_image.setImageBitmap(bitmap);
                 } else {
-                    BitMatrix matrix = writer.encode(barcodeNumber_text.getText().toString().trim(), BarcodeFormat.ITF, 500, 350);
+                    BitMatrix matrix = writer.encode(barcodeNumber_text.getText().toString().trim(), BarcodeFormat.CODE_128, 500, 350);
                     BarcodeEncoder encoder = new BarcodeEncoder();
                     Bitmap bitmap = encoder.createBitmap(matrix);
                     barcode_image.setImageBitmap(bitmap);
@@ -170,15 +182,45 @@ public class AddBarcodeActivity extends AppCompatActivity {
             Toast.makeText(this, "Error occurred!", Toast.LENGTH_SHORT).show();
         }
         else{
-            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-            SparseArray<TextBlock> textBlockSparseArray = recognizer.detect(frame);
-            StringBuilder stringBuilder = new StringBuilder();
-            for(int i = 0; i < textBlockSparseArray.size(); i++){
-                TextBlock textBlock = textBlockSparseArray.valueAt(i);
-                stringBuilder.append(textBlock.getValue());
-                stringBuilder.append("\n");
-            }
-            barcodeNumber_text.setText(stringBuilder.toString());
+            InputImage image = InputImage.fromBitmap(bitmap, 0);
+            scanBarcodes(image);
         }
+    }
+
+
+    private void scanBarcodes(InputImage image){
+        BarcodeScannerOptions options =
+                new BarcodeScannerOptions.Builder()
+                        .setBarcodeFormats(
+                                Barcode.FORMAT_ALL_FORMATS)
+                        .build();
+
+        BarcodeScanner scanner = BarcodeScanning.getClient();
+
+        Task<List<Barcode>> result = scanner.process(image).addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
+            @Override
+            public void onSuccess(List<Barcode> barcodes) {
+                for(Barcode barcode : barcodes){
+                    Rect bounds = barcode.getBoundingBox();
+                    Point[] corners = barcode.getCornerPoints();
+
+                    String rawValue = barcode.getRawValue();
+
+                    int valueType = barcode.getValueType();
+
+                    switch (1){
+                        default:
+                        String returnValue = barcode.getDisplayValue();
+                        Toast.makeText(AddBarcodeActivity.this, rawValue, Toast.LENGTH_SHORT).show();
+                        barcodeNumber_text.setText(returnValue);
+                    }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
     }
 }
