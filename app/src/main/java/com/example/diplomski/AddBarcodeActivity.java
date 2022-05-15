@@ -13,7 +13,6 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -26,8 +25,6 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
@@ -87,8 +84,9 @@ public class AddBarcodeActivity extends AppCompatActivity {
                 }
                 else{
                     Intent intent = new Intent(AddBarcodeActivity.this, AddActivity.class);
-                    startActivity(intent);
+                    intent.putExtra("barcodeID", String.valueOf(barcodeNumber_text.getText()));
                     Toast.makeText(AddBarcodeActivity.this, "Barcode added successfully!", Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
                 }
             }
         });
@@ -167,8 +165,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
                 Uri resultUri = result.getUri();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-                    barcode_image.setImageBitmap(bitmap);
-                    getTextFromImage(bitmap);
+                    getBarcodeFromImage(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -176,7 +173,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
         }
     }
 
-    private void getTextFromImage(Bitmap bitmap){
+    private void getBarcodeFromImage(Bitmap bitmap){
         TextRecognizer recognizer = new TextRecognizer.Builder(this).build();
         if(!recognizer.isOperational()){
             Toast.makeText(this, "Error occurred!", Toast.LENGTH_SHORT).show();
@@ -186,7 +183,6 @@ public class AddBarcodeActivity extends AppCompatActivity {
             scanBarcodes(image);
         }
     }
-
 
     private void scanBarcodes(InputImage image){
         BarcodeScannerOptions options =
@@ -208,18 +204,15 @@ public class AddBarcodeActivity extends AppCompatActivity {
 
                     int valueType = barcode.getValueType();
 
-                    switch (1){
-                        default:
-                        String returnValue = barcode.getDisplayValue();
-                        Toast.makeText(AddBarcodeActivity.this, rawValue, Toast.LENGTH_SHORT).show();
-                        barcodeNumber_text.setText(returnValue);
-                    }
+                    String returnValue = barcode.getDisplayValue();
+                    Toast.makeText(AddBarcodeActivity.this, rawValue, Toast.LENGTH_SHORT).show();
+                    barcodeNumber_text.setText(returnValue);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
+                Toast.makeText(AddBarcodeActivity.this, "Barcode not recognized!", Toast.LENGTH_SHORT).show();
             }
         });
     }

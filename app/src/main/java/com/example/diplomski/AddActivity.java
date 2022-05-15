@@ -58,7 +58,7 @@ public class AddActivity extends AppCompatActivity {
                     store_input.setError("Store name field cannot be empty!");
                     Toast.makeText(AddActivity.this, "Store name field cannot be empty!", Toast.LENGTH_SHORT).show();
                 }else{
-                    myDB.addStore(store_input.getText().toString().trim());
+                    myDB.addStoreName(store_input.getText().toString().trim());
                     store_input.setError(null);
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);
                     startActivity(intent);

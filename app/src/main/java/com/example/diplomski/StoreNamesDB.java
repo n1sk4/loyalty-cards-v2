@@ -39,7 +39,7 @@ public class StoreNamesDB extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    void addStore(String storeName){
+    void addStoreName(String storeName){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
