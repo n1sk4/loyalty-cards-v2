@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView no_data_imageView;
 
     StoresDB myDB;
-    ArrayList<String> store_id, store_name;
+    ArrayList<String> store_id, store_name, store_barcode;
 
     CustomAdapter customAdapter;
 
@@ -41,23 +41,25 @@ public class MainActivity extends AppCompatActivity {
         no_data = findViewById(R.id.no_data);
         no_data_imageView = findViewById(R.id.no_data_imageView);
 
+        myDB = new StoresDB(MainActivity.this);
+        store_id = new ArrayList<>();
+        store_name = new ArrayList<>();
+        store_barcode = new ArrayList<>();
+
+        storeDataInArrays();
+
+        customAdapter = new CustomAdapter(MainActivity.this, store_id, store_name, store_barcode);
+        recyclerView.setAdapter(customAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, com.example.diplomski.AddActivity.class);
+                intent.putExtra("id", store_id);
                 startActivity(intent);
             }
         });
-
-        myDB = new StoresDB(MainActivity.this);
-        store_id = new ArrayList<>();
-        store_name = new ArrayList<>();
-
-        storeDataInArrays();
-
-        customAdapter = new CustomAdapter(MainActivity.this, store_id, store_name);
-        recyclerView.setAdapter(customAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
 
     void storeDataInArrays(){
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             while (cursor.moveToNext()){
                 store_id.add(cursor.getString(0));
                 store_name.add(cursor.getString(1));
+                store_barcode.add(cursor.getString(2));
             }
 
             no_data_imageView.setVisibility(View.GONE);
@@ -86,12 +89,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.delete_all){
-            confirmDialog();
+            confirmDeleteAllDialog();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    void confirmDialog(){
+    void confirmDeleteAllDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete All?");
         builder.setMessage("Are you sure you want to delete all Data?");

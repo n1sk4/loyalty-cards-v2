@@ -12,12 +12,13 @@ import androidx.annotation.Nullable;
 public class StoresDB extends SQLiteOpenHelper {
 
     private Context context;
-    private static final String DATABASE_NAME = "StoreNames.db";
+    private static final String DATABASE_NAME = "Stores.db";
     private static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_NAME      = "Stores";
     private static final String COLUMN_ID       = "_id";
     private static final String COLUMN_STORE    = "store_name";
+    private static final String COLUMN_BARCODE  = "barcode";
 
 
     StoresDB(@Nullable Context context) {
@@ -29,7 +30,8 @@ public class StoresDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String query =  "CREATE TABLE " + TABLE_NAME +
                         " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                            COLUMN_STORE + " TEXT);";
+                            COLUMN_STORE + " TEXT," +
+                            COLUMN_BARCODE + " TEXT);";
         db.execSQL(query);
     }
 
@@ -39,7 +41,7 @@ public class StoresDB extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    void addStoreName(String storeName){
+    long addStoreName(String storeName){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -47,11 +49,32 @@ public class StoresDB extends SQLiteOpenHelper {
 
         long result = db.insert(TABLE_NAME, null, cv);
 
+        //TODO Delete in the future *Debugging helper*
         if(result == -1){
-            Toast.makeText(context, "Failed to add item", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Failed to add store name", Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(context, "Added successfully", Toast.LENGTH_SHORT).show();
         }
+
+        return result;
+    }
+
+    long addStoreBarcode(String storeBarcode, String row_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_BARCODE, storeBarcode);
+
+        long result = db.update(TABLE_NAME,cv, "_id?", new String[]{row_id});
+
+        //TODO Delete in the future *Debugging helper*
+        if(result == -1){
+            Toast.makeText(context, "Failed to add store barcode", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "Added successfully", Toast.LENGTH_SHORT).show();
+        }
+
+        return result;
     }
 
     Cursor readAllData(){
@@ -67,17 +90,19 @@ public class StoresDB extends SQLiteOpenHelper {
         return cursor;
     }
 
-    void updateData(String row_id, String storeName){
+    void updateData(String row_id, String storeName, String storeBarcode){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_STORE, storeName);
+        cv.put(COLUMN_BARCODE, storeBarcode);
 
-        long result = db.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
-        if (result == -1){
-            Toast.makeText(context, "Failed to update", Toast.LENGTH_SHORT).show();
+        long result_name = db.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
+
+        if (result_name == -1){
+            Toast.makeText(context, "Failed to update!", Toast.LENGTH_SHORT).show();
         }else {
-            Toast.makeText(context, "Updated successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Updated successfully!", Toast.LENGTH_SHORT).show();
         }
     }
 

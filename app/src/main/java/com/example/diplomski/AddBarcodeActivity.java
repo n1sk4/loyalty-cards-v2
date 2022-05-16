@@ -84,7 +84,9 @@ public class AddBarcodeActivity extends AppCompatActivity {
                 }
                 else{
                     Intent intent = new Intent(AddBarcodeActivity.this, AddActivity.class);
-                    intent.putExtra("barcodeID", String.valueOf(barcodeNumber_text.getText()));
+                    intent.putExtra("barcode", String.valueOf(barcodeNumber_text.getText()));
+                    intent.putExtra("barcodeType", String.valueOf(switchSelection));
+                    intent.putExtra("AddBarcodeActivity", "AddBarcodeActivity");
                     Toast.makeText(AddBarcodeActivity.this, "Barcode added successfully!", Toast.LENGTH_SHORT).show();
                     startActivity(intent);
                 }
@@ -111,8 +113,8 @@ public class AddBarcodeActivity extends AppCompatActivity {
             barcodeNumber_text.setError("Enter barcode manually field cannot be empty!");
             Toast.makeText(AddBarcodeActivity.this, "Enter barcode manually field cannot be empty!", Toast.LENGTH_SHORT).show();
         }
-        else if(barcodeNumber_text.getText().toString().trim().length() != 13 && !switchSelection){
-            Toast.makeText(AddBarcodeActivity.this, "Barcode must be 13 numbers long!", Toast.LENGTH_SHORT).show();
+        else if(barcodeNumber_text.getText().toString().trim().length() != 12 && !switchSelection){
+            Toast.makeText(AddBarcodeActivity.this, "Barcode must be 12 numbers long!", Toast.LENGTH_SHORT).show();
         }
         else {
             MultiFormatWriter writer = new MultiFormatWriter();

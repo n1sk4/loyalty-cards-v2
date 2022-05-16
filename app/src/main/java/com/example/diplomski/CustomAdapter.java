@@ -17,17 +17,19 @@ import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
     private Context context;
-    private ArrayList store_id, store_name;
+    private ArrayList store_id, store_name, store_barcode;
 
     int position;
 
     CustomAdapter(Context context,
                   ArrayList store_id,
-                  ArrayList store_name){
+                  ArrayList store_name,
+                  ArrayList store_barcode){
 
         this.context = context;
         this.store_id = store_id;
         this.store_name = store_name;
+        this.store_barcode = store_barcode;
     }
 
     @NonNull
@@ -49,6 +51,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 Intent intent = new Intent(context, com.example.diplomski.UpdateActivity.class);
                 intent.putExtra("id", String.valueOf(store_id.get(position)));
                 intent.putExtra("name", String.valueOf(store_name.get(position)));
+                intent.putExtra("barcode", String.valueOf(store_barcode.get(position)));
                 context.startActivity(intent);
                 return true;
             }
@@ -60,6 +63,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 Intent intent = new Intent(context, com.example.diplomski.BarcodeActivity.class);
                 intent.putExtra("id", String.valueOf(store_id.get(position)));
                 intent.putExtra("name", String.valueOf(store_name.get(position)));
+                intent.putExtra("barcode", String.valueOf(store_barcode.get(position)));
                 context.startActivity(intent);
             }
         });
@@ -71,7 +75,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView store_id_txt, store_name_txt;
+        TextView store_name_txt;
         ImageView store_logo_img;
         LinearLayout mainLayout;
 

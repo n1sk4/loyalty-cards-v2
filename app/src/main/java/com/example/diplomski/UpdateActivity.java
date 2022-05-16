@@ -30,7 +30,7 @@ public class UpdateActivity extends AppCompatActivity {
     Button update_button, deleteButton, updateLogo_button;
     ImageView logo_imageView;
 
-    String id, name;
+    String id, name, barcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,8 @@ public class UpdateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 StoresDB myDB = new StoresDB(UpdateActivity.this);
                 name = name_input.getText().toString().trim();
-                myDB.updateData(id, name);
+                barcode = "000000000000";
+                myDB.updateData(id, name, barcode);
                 ActionBar ab = getSupportActionBar();
                 if(name != null){
                     assert ab != null;
@@ -80,10 +81,11 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     void getAndSetIntentData(){
-        if(getIntent().hasExtra("id") && getIntent().hasExtra("name")){
+        if(getIntent().hasExtra("id") && getIntent().hasExtra("name") && getIntent().hasExtra("barcode")){
             //Getting Data From Intent
             id = getIntent().getStringExtra("id");
             name = getIntent().getStringExtra("name");
+            barcode = getIntent().getStringExtra("barcode");
             //Setting Data
             name_input.setText(name);
         }else{
@@ -100,7 +102,7 @@ public class UpdateActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 StoresDB myDB = new StoresDB(UpdateActivity.this);
                 myDB.deleteOneRow(id);
-                myDB.updateData(id, name);
+                myDB.updateData(id, name, barcode);
                 Intent intent = new Intent(UpdateActivity.this, com.example.diplomski.MainActivity.class);
                 startActivity(intent);
             }
@@ -108,7 +110,7 @@ public class UpdateActivity extends AppCompatActivity {
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                //TODO Do something
             }
         });
         builder.create().show();
