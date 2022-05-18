@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
     private Context context;
-    private ArrayList store_id, store_name, store_barcode;
+    private ArrayList storeID, storeName, storeBarcode;
 
     int position;
 
@@ -27,9 +27,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                   ArrayList store_barcode){
 
         this.context = context;
-        this.store_id = store_id;
-        this.store_name = store_name;
-        this.store_barcode = store_barcode;
+        this.storeID = store_id;
+        this.storeName = store_name;
+        this.storeBarcode = store_barcode;
     }
 
     @NonNull
@@ -43,15 +43,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.store_name_txt.setText(String.valueOf(store_name.get(position)));
+        holder.storeName_textView.setText(String.valueOf(storeName.get(position)));
 
         holder.mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(context, com.example.diplomski.UpdateActivity.class);
-                intent.putExtra("id", String.valueOf(store_id.get(position)));
-                intent.putExtra("name", String.valueOf(store_name.get(position)));
-                intent.putExtra("barcode", String.valueOf(store_barcode.get(position)));
+                intent.putExtra("id", String.valueOf(storeID.get(position)));
+                intent.putExtra("name", String.valueOf(storeName.get(position)));
+                intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));
                 context.startActivity(intent);
                 return true;
             }
@@ -61,9 +61,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, com.example.diplomski.BarcodeActivity.class);
-                intent.putExtra("id", String.valueOf(store_id.get(position)));
-                intent.putExtra("name", String.valueOf(store_name.get(position)));
-                intent.putExtra("barcode", String.valueOf(store_barcode.get(position)));
+                intent.putExtra("id", String.valueOf(storeID.get(position)));
+                intent.putExtra("name", String.valueOf(storeName.get(position)));
+                intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));
                 context.startActivity(intent);
             }
         });
@@ -71,18 +71,18 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
-        return store_id.size();
+        return storeID.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView store_name_txt;
-        ImageView store_logo_img;
+        TextView storeName_textView;
+        ImageView storeLogo_ImageView;
         LinearLayout mainLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            store_name_txt = itemView.findViewById(R.id.store_name_txt);
-            store_logo_img = itemView.findViewById(R.id.logo_imageView);
+            storeName_textView = itemView.findViewById(R.id.store_name_txt);
+            storeLogo_ImageView = itemView.findViewById(R.id.logo_imageView);
             mainLayout = itemView.findViewById(R.id.mainLayout);
         }
     }

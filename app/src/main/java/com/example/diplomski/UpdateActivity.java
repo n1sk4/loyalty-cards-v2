@@ -26,8 +26,10 @@ import java.io.IOException;
 
 public class UpdateActivity extends AppCompatActivity {
 
-    EditText name_input;
-    Button update_button, deleteButton, updateLogo_button;
+    EditText name_editText;
+    Button update_button;
+    Button delete_button;
+    Button updateLogo_button;
     ImageView logo_imageView;
 
     String id, name, barcode;
@@ -37,11 +39,7 @@ public class UpdateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
 
-        name_input = findViewById(R.id.name_input_up);
-        update_button = findViewById(R.id.update_button);
-        deleteButton = findViewById(R.id.delete_button);
-        updateLogo_button = findViewById(R.id.update_logo);
-        logo_imageView = findViewById(R.id.addLogo_imageView);
+        findViews();
 
         getAndSetIntentData();
 
@@ -54,7 +52,7 @@ public class UpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 StoresDB myDB = new StoresDB(UpdateActivity.this);
-                name = name_input.getText().toString().trim();
+                name = name_editText.getText().toString().trim();
                 barcode = "000000000000";
                 myDB.updateData(id, name, barcode);
                 ActionBar ab = getSupportActionBar();
@@ -65,7 +63,7 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
+        delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 confirmDialog();
@@ -87,7 +85,7 @@ public class UpdateActivity extends AppCompatActivity {
             name = getIntent().getStringExtra("name");
             barcode = getIntent().getStringExtra("barcode");
             //Setting Data
-            name_input.setText(name);
+            name_editText.setText(name);
         }else{
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
         }
@@ -142,5 +140,13 @@ public class UpdateActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void findViews(){
+        name_editText = findViewById(R.id.name_input_up);
+        update_button = findViewById(R.id.update_button);
+        delete_button = findViewById(R.id.delete_button);
+        updateLogo_button = findViewById(R.id.update_logo);
+        logo_imageView = findViewById(R.id.addLogo_imageView);
     }
 }

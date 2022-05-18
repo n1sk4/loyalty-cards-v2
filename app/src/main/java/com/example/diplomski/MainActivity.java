@@ -22,10 +22,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    FloatingActionButton add_button;
+
+    FloatingActionButton add_fab;
     RecyclerView recyclerView;
-    TextView no_data;
-    ImageView no_data_imageView;
+    TextView noData_textView;
+    ImageView noData_imageView;
 
     StoresDB myDB;
     ArrayList<String> store_id, store_name, store_barcode;
@@ -36,10 +37,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView = findViewById(R.id.recyclerView);
-        add_button = findViewById(R.id.add_button);
-        no_data = findViewById(R.id.no_data);
-        no_data_imageView = findViewById(R.id.no_data_imageView);
+
+        findViews();
 
         myDB = new StoresDB(MainActivity.this);
         store_id = new ArrayList<>();
@@ -52,21 +51,20 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
-        add_button.setOnClickListener(new View.OnClickListener() {
+        add_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, com.example.diplomski.AddActivity.class);
-                intent.putExtra("id", store_id);
+                Intent intent = new Intent(MainActivity.this, AddNameActivity.class);
                 startActivity(intent);
             }
         });
     }
 
-    void storeDataInArrays(){
+    private void storeDataInArrays(){
         Cursor cursor = myDB.readAllData();
         if(cursor.getCount() == 0){
-            no_data_imageView.setVisibility(View.VISIBLE);
-            no_data.setVisibility(View.VISIBLE);
+            noData_imageView.setVisibility(View.VISIBLE);
+            noData_textView.setVisibility(View.VISIBLE);
         }else{
             while (cursor.moveToNext()){
                 store_id.add(cursor.getString(0));
@@ -74,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 store_barcode.add(cursor.getString(2));
             }
 
-            no_data_imageView.setVisibility(View.GONE);
-            no_data.setVisibility(View.GONE);
+            noData_imageView.setVisibility(View.GONE);
+            noData_textView.setVisibility(View.GONE);
         }
     }
 
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    void confirmDeleteAllDialog(){
+    private void confirmDeleteAllDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete All?");
         builder.setMessage("Are you sure you want to delete all Data?");
@@ -113,5 +111,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+    private void findViews(){
+        recyclerView = findViewById(R.id.recyclerView);
+        add_fab = findViewById(R.id.add_button);
+        noData_textView = findViewById(R.id.no_data);
+        noData_imageView = findViewById(R.id.no_data_imageView);
     }
 }

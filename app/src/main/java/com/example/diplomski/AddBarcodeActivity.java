@@ -2,10 +2,12 @@ package com.example.diplomski;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -44,11 +46,12 @@ import java.util.List;
 
 public class AddBarcodeActivity extends AppCompatActivity {
     Button captureImage_button;
-    Button confirm_button;
+    Button next_button;
     Button generate_button;
-    EditText barcodeNumber_text;
-    TextView barcode_text;
-    ImageView barcode_image;
+    Button back_button;
+    EditText barcodeNumber_editText;
+    TextView barcode_textView;
+    ImageView barcode_imageView;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch barcodeQR_switch;
 
@@ -60,13 +63,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_barcode);
 
-        captureImage_button = findViewById(R.id.capturePicture_button);
-        confirm_button = findViewById(R.id.confirm_button);
-        barcodeNumber_text = findViewById(R.id.barcodeNumber_editText);
-        barcode_text = findViewById(R.id.barcode_textView);
-        barcodeQR_switch = findViewById(R.id.barcodeQR_switch);
-        generate_button = findViewById(R.id.generate_button);
-        barcode_image = findViewById(R.id.addBarcode_imageView);
+        findViews();
 
         generate_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,21 +72,23 @@ public class AddBarcodeActivity extends AppCompatActivity {
             }
         });
 
-        confirm_button.setOnClickListener(new View.OnClickListener() {
+        next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(barcodeNumber_text.getText().length() <= 0){
-                    barcodeNumber_text.setError("Barcode field cannot be empty!");
-                    Toast.makeText(AddBarcodeActivity.this, "Barcode field cannot be empty!", Toast.LENGTH_SHORT).show();
+                if(barcodeNumber_editText.getText().length() <= 0){
+                    confirmNoBarcodeDialog();
                 }
                 else{
-                    Intent intent = new Intent(AddBarcodeActivity.this, AddActivity.class);
-                    intent.putExtra("barcode", String.valueOf(barcodeNumber_text.getText()));
-                    intent.putExtra("barcodeType", String.valueOf(switchSelection));
-                    intent.putExtra("AddBarcodeActivity", "AddBarcodeActivity");
-                    Toast.makeText(AddBarcodeActivity.this, "Barcode added successfully!", Toast.LENGTH_SHORT).show();
-                    startActivity(intent);
+                    startAddLogoActivity();
                 }
+            }
+        });
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddBarcodeActivity.this, AddNameActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -109,31 +108,31 @@ public class AddBarcodeActivity extends AppCompatActivity {
     }
 
     private void generateBarcodeImage(){
-        if(barcodeNumber_text.getText().toString().trim().length() <= 0) {
-            barcodeNumber_text.setError("Enter barcode manually field cannot be empty!");
+        if(barcodeNumber_editText.getText().toString().trim().length() <= 0) {
+            barcodeNumber_editText.setError("Enter barcode manually field cannot be empty!");
             Toast.makeText(AddBarcodeActivity.this, "Enter barcode manually field cannot be empty!", Toast.LENGTH_SHORT).show();
         }
-        else if(barcodeNumber_text.getText().toString().trim().length() != 12 && !switchSelection){
+        else if(barcodeNumber_editText.getText().toString().trim().length() != 12 && !switchSelection){
             Toast.makeText(AddBarcodeActivity.this, "Barcode must be 12 numbers long!", Toast.LENGTH_SHORT).show();
         }
         else {
             MultiFormatWriter writer = new MultiFormatWriter();
             try {
                 if (switchSelection) {
-                    BitMatrix matrix = writer.encode(barcodeNumber_text.getText().toString().trim(), BarcodeFormat.QR_CODE, 350, 350);
+                    BitMatrix matrix = writer.encode(barcodeNumber_editText.getText().toString().trim(), BarcodeFormat.QR_CODE, 350, 350);
                     BarcodeEncoder encoder = new BarcodeEncoder();
                     Bitmap bitmap = encoder.createBitmap(matrix);
-                    barcode_image.setImageBitmap(bitmap);
+                    barcode_imageView.setImageBitmap(bitmap);
                 } else {
-                    BitMatrix matrix = writer.encode(barcodeNumber_text.getText().toString().trim(), BarcodeFormat.CODE_128, 500, 350);
+                    BitMatrix matrix = writer.encode(barcodeNumber_editText.getText().toString().trim(), BarcodeFormat.CODE_128, 500, 350);
                     BarcodeEncoder encoder = new BarcodeEncoder();
                     Bitmap bitmap = encoder.createBitmap(matrix);
-                    barcode_image.setImageBitmap(bitmap);
+                    barcode_imageView.setImageBitmap(bitmap);
                 }
                 InputMethodManager manager = (InputMethodManager) getSystemService(
                         Context.INPUT_METHOD_SERVICE
                 );
-                manager.hideSoftInputFromWindow(barcode_text.getApplicationWindowToken(), 0);
+                manager.hideSoftInputFromWindow(barcode_textView.getApplicationWindowToken(), 0);
                 if(switchSelection){
                     Toast.makeText(AddBarcodeActivity.this, "QR code generated successfully!", Toast.LENGTH_SHORT).show();
                 }else {
@@ -148,9 +147,9 @@ public class AddBarcodeActivity extends AppCompatActivity {
     private void switchBarcodeStates(){
         switchSelection = !switchSelection;
         if(switchSelection){
-            barcode_text.setText("Generate QR code");
+            barcode_textView.setText("Generate QR code");
         }else{
-            barcode_text.setText("Generate Barcode");
+            barcode_textView.setText("Generate Barcode");
         }
     }
 
@@ -208,7 +207,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
 
                     String returnValue = barcode.getDisplayValue();
                     Toast.makeText(AddBarcodeActivity.this, rawValue, Toast.LENGTH_SHORT).show();
-                    barcodeNumber_text.setText(returnValue);
+                    barcodeNumber_editText.setText(returnValue);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -217,5 +216,40 @@ public class AddBarcodeActivity extends AppCompatActivity {
                 Toast.makeText(AddBarcodeActivity.this, "Barcode not recognized!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void confirmNoBarcodeDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Barcode missing!");
+        builder.setMessage("Are you sure you want to continue without " + "StoreName" + " store barcode?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startAddLogoActivity();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create().show();
+    }
+
+    private void startAddLogoActivity(){
+        Intent intent = new Intent(AddBarcodeActivity.this, AddLogoActivity.class);
+        startActivity(intent);
+    }
+
+    private void findViews(){
+        captureImage_button = findViewById(R.id.captureImage_AddBarcode_Button);
+        next_button = findViewById(R.id.confirm_AddBarcode_Button);
+        back_button = findViewById(R.id.back_AddBarcode_Button);
+        barcodeNumber_editText = findViewById(R.id.barcodeInput_AddBarcode_editText);
+        barcode_textView = findViewById(R.id.switchHint_AddBarcode_TextView);
+        barcodeQR_switch = findViewById(R.id.barcodeQR_switch);
+        generate_button = findViewById(R.id.generateBarcode_AddBarcode_Button);
+        barcode_imageView = findViewById(R.id.barcodePreview_AddBarcode_ImageView);
     }
 }

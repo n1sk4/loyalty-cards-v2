@@ -1,10 +1,7 @@
 package com.example.diplomski;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.os.Bundle;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -18,7 +15,9 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class BarcodeActivity extends AppCompatActivity {
-    ImageView barcodeImage;
+
+    ImageView barcode_imageView;
+
     String id, name, barcode;
 
     boolean barcodeExists;
@@ -28,7 +27,7 @@ public class BarcodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode);
 
-        barcodeImage = findViewById(R.id.barcodeActivity_imageView);
+        findViews();
 
         getIntentData();
 
@@ -40,7 +39,7 @@ public class BarcodeActivity extends AppCompatActivity {
         generateBarcodeImage();
     }
 
-    void getIntentData(){
+    private void getIntentData(){
         if(getIntent().hasExtra("id") && getIntent().hasExtra("name")){
             //Getting Data From Intent
             id = getIntent().getStringExtra("id");
@@ -68,12 +67,16 @@ public class BarcodeActivity extends AppCompatActivity {
                 BitMatrix matrix = writer.encode(barcode, BarcodeFormat.CODE_128, width, height);
                 BarcodeEncoder encoder = new BarcodeEncoder();
                 Bitmap bitmap = encoder.createBitmap(matrix);
-                barcodeImage.setImageBitmap(bitmap);
+                barcode_imageView.setImageBitmap(bitmap);
             } catch (WriterException e) {
                 e.printStackTrace();
             }
         }else {
             //TODO Do something
         }
+    }
+
+    private void findViews(){
+        barcode_imageView = findViewById(R.id.barcode_Barcode_ImageView);
     }
 }
