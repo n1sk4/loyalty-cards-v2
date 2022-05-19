@@ -1,7 +1,9 @@
 package com.example.diplomski;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +19,21 @@ import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
     private Context context;
-    private ArrayList storeID, storeName, storeBarcode;
+    private ArrayList storeID, storeName, storeBarcode, storeLogo;
 
     int position;
 
     CustomAdapter(Context context,
                   ArrayList store_id,
                   ArrayList store_name,
-                  ArrayList store_barcode){
+                  ArrayList store_barcode,
+                  ArrayList store_logo){
 
         this.context = context;
         this.storeID = store_id;
         this.storeName = store_name;
         this.storeBarcode = store_barcode;
+        this.storeLogo = store_logo;
     }
 
     @NonNull
@@ -41,9 +45,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         holder.storeName_textView.setText(String.valueOf(storeName.get(position)));
+        if(storeLogo.get(position) != null){
+            holder.storeLogo_ImageView.setImageBitmap((Bitmap) storeLogo.get(position));
+        }
 
         holder.mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

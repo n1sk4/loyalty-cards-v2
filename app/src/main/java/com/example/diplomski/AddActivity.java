@@ -53,7 +53,8 @@ public class AddActivity extends AppCompatActivity {
 
         getAddBarcodeIntentDataAndSetImage();
 
-        if(ContextCompat.checkSelfPermission(AddActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+        if(ContextCompat.checkSelfPermission(AddActivity.this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(AddActivity.this, new String[]{
                     Manifest.permission.CAMERA
             }, REQUEST_CAMERA_CODE);
@@ -65,13 +66,17 @@ public class AddActivity extends AppCompatActivity {
                 StoresDB myDB = new StoresDB(AddActivity.this);
                 if(storeName_editText.getText().toString().length() <= 0){
                     storeName_editText.setError("Store name field cannot be empty!");
-                    Toast.makeText(AddActivity.this, "Store name field cannot be empty!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddActivity.this,
+                            "Store name field cannot be empty!", Toast.LENGTH_SHORT).show();
                 }else{
-                    long db_result_name = myDB.addStoreName(storeName_editText.getText().toString().trim());
+                    long db_result_name = myDB.addStoreName(
+                            storeName_editText.getText().toString().trim());
                     storeName_editText.setError(null);
                     if(barcode != null){
-                        long db_result_barcode = myDB.addStoreBarcode(barcode.trim(), String.valueOf(db_result_name));
-                        Intent intent = new Intent(AddActivity.this, MainActivity.class);
+                        long db_result_barcode = myDB.addStoreBarcode(barcode.trim(),
+                                String.valueOf(db_result_name));
+                        Intent intent = new Intent(AddActivity.this,
+                                MainActivity.class);
                         startActivity(intent);
                     }else{
                         openDialogBarcodeMissing();
@@ -105,7 +110,8 @@ public class AddActivity extends AppCompatActivity {
                 assert result != null;
                 Uri resultUri = result.getUri();
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                            this.getContentResolver(), resultUri);
                     logo_imageView.setImageBitmap(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -115,7 +121,8 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void selectAndPlaceLogo(){
-        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(AddActivity.this);
+        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON)
+                .start(AddActivity.this);
     }
 
     private void openAddBarcodeActivity(){
@@ -126,7 +133,8 @@ public class AddActivity extends AppCompatActivity {
     private void openDialogBarcodeMissing(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Barcode missing!");
-        builder.setMessage("Are you sure you want to continue without " + storeName_editText.getText().toString().trim() + " store barcode?");
+        builder.setMessage("Are you sure you want to continue without " +
+                storeName_editText.getText().toString().trim() + " store barcode?");
         builder.setPositiveButton("Yes", (dialog, which) -> {
             Intent intent = new Intent(AddActivity.this, MainActivity.class);
             startActivity(intent);
@@ -138,17 +146,20 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void getAddBarcodeIntentDataAndSetImage(){
-        if(getIntent().hasExtra("barcode") && getIntent().hasExtra("AddBarcodeActivity")){
+        if(getIntent().hasExtra("barcode") && getIntent().hasExtra(
+                "AddBarcodeActivity")){
             barcode = getIntent().getStringExtra("barcode");
             try {
                 MultiFormatWriter writer = new MultiFormatWriter();
                 if(getIntent().getStringExtra("barcodeType").equals("false")){
-                    BitMatrix matrix = writer.encode(barcode, BarcodeFormat.CODE_128, 350, 100);
+                    BitMatrix matrix = writer.encode(barcode,
+                            BarcodeFormat.CODE_128, 350, 100);
                     BarcodeEncoder encoder = new BarcodeEncoder();
                     Bitmap bitmap = encoder.createBitmap(matrix);
                     barcode_imageView.setImageBitmap(bitmap);
                 }else{
-                    BitMatrix matrix = writer.encode(barcode, BarcodeFormat.AZTEC, 100, 100);
+                    BitMatrix matrix = writer.encode(barcode,
+                            BarcodeFormat.AZTEC, 100, 100);
                     BarcodeEncoder encoder = new BarcodeEncoder();
                     Bitmap bitmap = encoder.createBitmap(matrix);
                     barcode_imageView.setImageBitmap(bitmap);

@@ -55,6 +55,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch barcodeQR_switch;
 
+    String database_id;
     String barcodeNumber;
     boolean switchSelection = false; //false = barcode; true = QR code
 
@@ -64,6 +65,8 @@ public class AddBarcodeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_barcode);
 
         findViews();
+
+        getIntentData();
 
         generate_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +82,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
                     confirmNoBarcodeDialog();
                 }
                 else{
+                    storeBarcodeToDatabase();
                     startAddLogoActivity();
                 }
             }
@@ -87,8 +91,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddBarcodeActivity.this, AddNameActivity.class);
-                startActivity(intent);
+                startAddNameActivity();
             }
         });
 
@@ -97,6 +100,11 @@ public class AddBarcodeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switchBarcodeStates();
             }
+        });
+
+        barcode_imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {selectAndPlaceBarcode();}
         });
 
         captureImage_button.setOnClickListener(new View.OnClickListener() {
@@ -110,21 +118,26 @@ public class AddBarcodeActivity extends AppCompatActivity {
     private void generateBarcodeImage(){
         if(barcodeNumber_editText.getText().toString().trim().length() <= 0) {
             barcodeNumber_editText.setError("Enter barcode manually field cannot be empty!");
-            Toast.makeText(AddBarcodeActivity.this, "Enter barcode manually field cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddBarcodeActivity.this,
+                    "Enter barcode manually field cannot be empty!", Toast.LENGTH_SHORT).show();
         }
-        else if(barcodeNumber_editText.getText().toString().trim().length() != 12 && !switchSelection){
-            Toast.makeText(AddBarcodeActivity.this, "Barcode must be 12 numbers long!", Toast.LENGTH_SHORT).show();
+        else if(barcodeNumber_editText.getText().toString().trim().length() != 12
+                && !switchSelection){
+            Toast.makeText(AddBarcodeActivity.this,
+                    "Barcode must be 12 numbers long!", Toast.LENGTH_SHORT).show();
         }
         else {
             MultiFormatWriter writer = new MultiFormatWriter();
             try {
                 if (switchSelection) {
-                    BitMatrix matrix = writer.encode(barcodeNumber_editText.getText().toString().trim(), BarcodeFormat.QR_CODE, 350, 350);
+                    BitMatrix matrix = writer.encode(barcodeNumber_editText.getText().toString()
+                            .trim(), BarcodeFormat.QR_CODE, 350, 350);
                     BarcodeEncoder encoder = new BarcodeEncoder();
                     Bitmap bitmap = encoder.createBitmap(matrix);
                     barcode_imageView.setImageBitmap(bitmap);
                 } else {
-                    BitMatrix matrix = writer.encode(barcodeNumber_editText.getText().toString().trim(), BarcodeFormat.CODE_128, 500, 350);
+                    BitMatrix matrix = writer.encode(barcodeNumber_editText.getText().toString()
+                            .trim(), BarcodeFormat.CODE_128, 500, 350);
                     BarcodeEncoder encoder = new BarcodeEncoder();
                     Bitmap bitmap = encoder.createBitmap(matrix);
                     barcode_imageView.setImageBitmap(bitmap);
@@ -134,9 +147,11 @@ public class AddBarcodeActivity extends AppCompatActivity {
                 );
                 manager.hideSoftInputFromWindow(barcode_textView.getApplicationWindowToken(), 0);
                 if(switchSelection){
-                    Toast.makeText(AddBarcodeActivity.this, "QR code generated successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddBarcodeActivity.this,
+                            "QR code generated successfully!", Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(AddBarcodeActivity.this, "Barcode generated successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddBarcodeActivity.this,
+                            "Barcode generated successfully!", Toast.LENGTH_SHORT).show();
                 }
             } catch (WriterException e) {
                 e.printStackTrace();
@@ -154,7 +169,8 @@ public class AddBarcodeActivity extends AppCompatActivity {
     }
 
     private void selectAndPlaceBarcode(){
-        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(AddBarcodeActivity.this);
+        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON)
+                .start(AddBarcodeActivity.this);
     }
 
     @Override
@@ -165,7 +181,8 @@ public class AddBarcodeActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 Uri resultUri = result.getUri();
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                            this.getContentResolver(), resultUri);
                     getBarcodeFromImage(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -194,7 +211,8 @@ public class AddBarcodeActivity extends AppCompatActivity {
 
         BarcodeScanner scanner = BarcodeScanning.getClient();
 
-        Task<List<Barcode>> result = scanner.process(image).addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
+        Task<List<Barcode>> result = scanner.process(image)
+                .addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
             @Override
             public void onSuccess(List<Barcode> barcodes) {
                 for(Barcode barcode : barcodes){
@@ -206,14 +224,16 @@ public class AddBarcodeActivity extends AppCompatActivity {
                     int valueType = barcode.getValueType();
 
                     String returnValue = barcode.getDisplayValue();
-                    Toast.makeText(AddBarcodeActivity.this, rawValue, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddBarcodeActivity.this, rawValue,
+                            Toast.LENGTH_SHORT).show();
                     barcodeNumber_editText.setText(returnValue);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AddBarcodeActivity.this, "Barcode not recognized!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddBarcodeActivity.this,
+                        "Barcode not recognized!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -221,7 +241,8 @@ public class AddBarcodeActivity extends AppCompatActivity {
     private void confirmNoBarcodeDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Barcode missing!");
-        builder.setMessage("Are you sure you want to continue without " + "StoreName" + " store barcode?");
+        builder.setMessage("Are you sure you want to continue without "
+                + "StoreName" + " store barcode?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -237,8 +258,38 @@ public class AddBarcodeActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    private void returnToAddNameDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add store name");
+        builder.setMessage("Do you want to add store name?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startAddNameActivity();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create().show();
+    }
+
     private void startAddLogoActivity(){
         Intent intent = new Intent(AddBarcodeActivity.this, AddLogoActivity.class);
+        if(database_id != null){
+            intent.putExtra("id", database_id);
+        }
+        startActivity(intent);
+    }
+
+    private void startAddNameActivity(){
+        Intent intent = new Intent(AddBarcodeActivity.this, AddNameActivity.class);
+        if(database_id != null){
+            intent.putExtra("id", database_id);
+        }
         startActivity(intent);
     }
 
@@ -251,5 +302,25 @@ public class AddBarcodeActivity extends AppCompatActivity {
         barcodeQR_switch = findViewById(R.id.barcodeQR_switch);
         generate_button = findViewById(R.id.generateBarcode_AddBarcode_Button);
         barcode_imageView = findViewById(R.id.barcodePreview_AddBarcode_ImageView);
+    }
+
+    private void getIntentData(){
+        if(getIntent().hasExtra("id")){
+            database_id = getIntent().getStringExtra("id");
+        }
+    }
+
+    private void storeBarcodeToDatabase(){
+        StoresDB myDB = new StoresDB(AddBarcodeActivity.this);
+        barcodeNumber = barcodeNumber_editText.getText().toString().trim();
+        if(database_id == null) {
+            Toast.makeText(AddBarcodeActivity.this,
+                    "You are missing store name!", Toast.LENGTH_SHORT).show();
+        }else if(barcodeNumber.isEmpty()){
+            Toast.makeText(this,
+                    "Barcode number is missing!", Toast.LENGTH_SHORT).show();
+        }else{
+            myDB.addStoreBarcode(database_id, barcodeNumber);
+        }
     }
 }

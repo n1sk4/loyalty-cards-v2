@@ -49,7 +49,8 @@ public class BarcodeActivity extends AppCompatActivity {
                 barcodeExists = true;
             }
             else{
-                Toast.makeText(this, "Barcode doesn't exist for " + name + " store", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Barcode doesn't exist for " + name
+                        + " store", Toast.LENGTH_SHORT).show();
                 barcodeExists = false;
             }
         }else{

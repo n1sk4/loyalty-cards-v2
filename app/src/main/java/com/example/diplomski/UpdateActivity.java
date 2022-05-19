@@ -33,6 +33,7 @@ public class UpdateActivity extends AppCompatActivity {
     ImageView logo_imageView;
 
     String id, name, barcode;
+    Bitmap logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class UpdateActivity extends AppCompatActivity {
                 StoresDB myDB = new StoresDB(UpdateActivity.this);
                 name = name_editText.getText().toString().trim();
                 barcode = "000000000000";
-                myDB.updateData(id, name, barcode);
+                myDB.updateData(id, name, barcode, logo);
                 ActionBar ab = getSupportActionBar();
                 if(name != null){
                     assert ab != null;
@@ -79,7 +80,8 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     void getAndSetIntentData(){
-        if(getIntent().hasExtra("id") && getIntent().hasExtra("name") && getIntent().hasExtra("barcode")){
+        if(getIntent().hasExtra("id") && getIntent().hasExtra("name")
+                && getIntent().hasExtra("barcode")){
             //Getting Data From Intent
             id = getIntent().getStringExtra("id");
             name = getIntent().getStringExtra("name");
@@ -100,8 +102,9 @@ public class UpdateActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 StoresDB myDB = new StoresDB(UpdateActivity.this);
                 myDB.deleteOneRow(id);
-                myDB.updateData(id, name, barcode);
-                Intent intent = new Intent(UpdateActivity.this, com.example.diplomski.MainActivity.class);
+                myDB.updateData(id, name, barcode, logo);
+                Intent intent = new Intent(UpdateActivity.this,
+                        com.example.diplomski.MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -122,7 +125,8 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     private void selectAndPlaceLogo(){
-        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(UpdateActivity.this);
+        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(
+                UpdateActivity.this);
     }
 
     @Override
@@ -133,7 +137,8 @@ public class UpdateActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 Uri resultUri = result.getUri();
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                            this.getContentResolver(), resultUri);
                     logo_imageView.setImageBitmap(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();

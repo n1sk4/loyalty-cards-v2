@@ -3,6 +3,8 @@ package com.example.diplomski;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     StoresDB myDB;
     ArrayList<String> store_id, store_name, store_barcode;
+    byte[] store_logo_blob;
+    ArrayList<Bitmap> store_logo;
 
     CustomAdapter customAdapter;
 
@@ -44,10 +48,12 @@ public class MainActivity extends AppCompatActivity {
         store_id = new ArrayList<>();
         store_name = new ArrayList<>();
         store_barcode = new ArrayList<>();
+        store_logo = new ArrayList<>();
 
         storeDataInArrays();
 
-        customAdapter = new CustomAdapter(MainActivity.this, store_id, store_name, store_barcode);
+        customAdapter = new CustomAdapter(MainActivity.this,
+                store_id, store_name, store_barcode, store_logo);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -70,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
                 store_id.add(cursor.getString(0));
                 store_name.add(cursor.getString(1));
                 store_barcode.add(cursor.getString(2));
+                store_logo_blob = cursor.getBlob(3);
+                if(store_logo_blob == null){
+                    store_logo.add(null);
+                }else {
+                    store_logo.add(BitmapFactory.decodeByteArray(store_logo_blob, 0,
+                            store_logo_blob.length));
+                }
             }
 
             noData_imageView.setVisibility(View.GONE);
