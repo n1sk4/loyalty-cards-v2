@@ -51,7 +51,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         if(storeLogo.get(position) != null){
             holder.storeLogo_ImageView.setImageBitmap((Bitmap) storeLogo.get(position));
         }
-
+        /*
         holder.mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -63,15 +63,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 return true;
             }
         });
-
+        */
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, com.example.diplomski.BarcodeActivity.class);
-                intent.putExtra("id", String.valueOf(storeID.get(position)));
-                intent.putExtra("name", String.valueOf(storeName.get(position)));
-                intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));
-                context.startActivity(intent);
+                startBarcodeActivity();
             }
         });
     }
@@ -92,5 +88,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             storeLogo_ImageView = itemView.findViewById(R.id.logo_imageView);
             mainLayout = itemView.findViewById(R.id.mainLayout);
         }
+    }
+
+    private void startBarcodeActivity(){
+        Intent intent = new Intent(context, com.example.diplomski.BarcodeActivity.class);
+        intent.putExtra("id", String.valueOf(storeID.get(position)));
+        intent.putExtra("name", String.valueOf(storeName.get(position)));
+        intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));
+        context.startActivity(intent);
     }
 }

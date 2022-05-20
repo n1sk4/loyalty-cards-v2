@@ -16,12 +16,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,30 +68,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    private void storeDataInArrays(){
-        Cursor cursor = myDB.readAllData();
-        if(cursor.getCount() == 0){
-            noData_imageView.setVisibility(View.VISIBLE);
-            noData_textView.setVisibility(View.VISIBLE);
-        }else{
-            while (cursor.moveToNext()){
-                store_id.add(cursor.getString(0));
-                store_name.add(cursor.getString(1));
-                store_barcode.add(cursor.getString(2));
-                store_logo_blob = cursor.getBlob(3);
-                if(store_logo_blob == null){
-                    store_logo.add(null);
-                }else {
-                    store_logo.add(BitmapFactory.decodeByteArray(store_logo_blob, 0,
-                            store_logo_blob.length));
-                }
-            }
-
-            noData_imageView.setVisibility(View.GONE);
-            noData_textView.setVisibility(View.GONE);
-        }
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -126,10 +109,57 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START
+                    | ItemTouchHelper.END, 0) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView,
+                              @NonNull RecyclerView.ViewHolder viewHolder,
+                              @NonNull RecyclerView.ViewHolder target) {
+            int fromPosition = viewHolder.getAdapterPosition();
+            int toPosition = target.getAdapterPosition();
+
+            Collections.swap(store_id, fromPosition, toPosition);
+
+            recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
+
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    };
+
     private void findViews(){
         recyclerView = findViewById(R.id.recyclerView);
         add_fab = findViewById(R.id.add_button);
         noData_textView = findViewById(R.id.no_data);
         noData_imageView = findViewById(R.id.no_data_imageView);
+    }
+
+    private void storeDataInArrays(){
+        Cursor cursor = myDB.readAllData();
+        if(cursor.getCount() == 0){
+            noData_imageView.setVisibility(View.VISIBLE);
+            noData_textView.setVisibility(View.VISIBLE);
+        }else{
+            while (cursor.moveToNext()){
+                store_id.add(cursor.getString(0));
+                store_name.add(cursor.getString(1));
+                store_barcode.add(cursor.getString(2));
+                store_logo_blob = cursor.getBlob(3);
+                if(store_logo_blob == null){
+                    store_logo.add(null);
+                }else {
+                    store_logo.add(BitmapFactory.decodeByteArray(store_logo_blob, 0,
+                            store_logo_blob.length));
+                }
+            }
+
+            noData_imageView.setVisibility(View.GONE);
+            noData_textView.setVisibility(View.GONE);
+        }
     }
 }
