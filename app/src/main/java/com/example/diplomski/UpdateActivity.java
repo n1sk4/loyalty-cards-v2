@@ -26,22 +26,21 @@ import java.io.IOException;
 
 public class UpdateActivity extends AppCompatActivity {
 
-    EditText name_input;
-    Button update_button, deleteButton, updateLogo_button;
+    EditText name_editText;
+    Button update_button;
+    Button delete_button;
+    Button updateLogo_button;
     ImageView logo_imageView;
 
-    String id, name;
+    String id, name, barcode;
+    Bitmap logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
 
-        name_input = findViewById(R.id.name_input_up);
-        update_button = findViewById(R.id.update_button);
-        deleteButton = findViewById(R.id.delete_button);
-        updateLogo_button = findViewById(R.id.update_logo);
-        logo_imageView = findViewById(R.id.addLogo_imageView);
+        findViews();
 
         getAndSetIntentData();
 
@@ -53,9 +52,10 @@ public class UpdateActivity extends AppCompatActivity {
         update_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                com.example.diplomski.StoreNamesDB myDB = new com.example.diplomski.StoreNamesDB(UpdateActivity.this);
-                name = name_input.getText().toString().trim();
-                myDB.updateData(id, name);
+                StoresDB myDB = new StoresDB(UpdateActivity.this);
+                name = name_editText.getText().toString().trim();
+                barcode = "000000000000";
+                myDB.updateData(id, name, barcode, logo);
                 ActionBar ab = getSupportActionBar();
                 if(name != null){
                     assert ab != null;
@@ -64,7 +64,7 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
+        delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 confirmDialog();
@@ -80,12 +80,14 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     void getAndSetIntentData(){
-        if(getIntent().hasExtra("id") && getIntent().hasExtra("name")){
+        if(getIntent().hasExtra("id") && getIntent().hasExtra("name")
+                && getIntent().hasExtra("barcode")){
             //Getting Data From Intent
             id = getIntent().getStringExtra("id");
             name = getIntent().getStringExtra("name");
+            barcode = getIntent().getStringExtra("barcode");
             //Setting Data
-            name_input.setText(name);
+            name_editText.setText(name);
         }else{
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
         }
@@ -98,17 +100,18 @@ public class UpdateActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                com.example.diplomski.StoreNamesDB myDB = new com.example.diplomski.StoreNamesDB(UpdateActivity.this);
+                StoresDB myDB = new StoresDB(UpdateActivity.this);
                 myDB.deleteOneRow(id);
-                myDB.updateData(id, name);
-                Intent intent = new Intent(UpdateActivity.this, com.example.diplomski.MainActivity.class);
+                myDB.updateData(id, name, barcode, logo);
+                Intent intent = new Intent(UpdateActivity.this,
+                        com.example.diplomski.MainActivity.class);
                 startActivity(intent);
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                //TODO Do something
             }
         });
         builder.create().show();
@@ -122,7 +125,8 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     private void selectAndPlaceLogo(){
-        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(UpdateActivity.this);
+        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(
+                UpdateActivity.this);
     }
 
     @Override
@@ -133,12 +137,21 @@ public class UpdateActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 Uri resultUri = result.getUri();
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                            this.getContentResolver(), resultUri);
                     logo_imageView.setImageBitmap(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
+
+    private void findViews(){
+        name_editText = findViewById(R.id.name_input_up);
+        update_button = findViewById(R.id.update_button);
+        delete_button = findViewById(R.id.delete_button);
+        updateLogo_button = findViewById(R.id.update_logo);
+        logo_imageView = findViewById(R.id.addLogo_imageView);
     }
 }

@@ -1,7 +1,9 @@
 package com.example.diplomski;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +19,21 @@ import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
     private Context context;
-    private ArrayList store_id, store_name;
+    private ArrayList storeID, storeName, storeBarcode, storeLogo;
 
     int position;
 
     CustomAdapter(Context context,
                   ArrayList store_id,
-                  ArrayList store_name){
+                  ArrayList store_name,
+                  ArrayList store_barcode,
+                  ArrayList store_logo){
 
         this.context = context;
-        this.store_id = store_id;
-        this.store_name = store_name;
+        this.storeID = store_id;
+        this.storeName = store_name;
+        this.storeBarcode = store_barcode;
+        this.storeLogo = store_logo;
     }
 
     @NonNull
@@ -39,47 +45,56 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        holder.store_name_txt.setText(String.valueOf(store_name.get(position)));
-
+        holder.storeName_textView.setText(String.valueOf(storeName.get(position)));
+        if(storeLogo.get(position) != null){
+            holder.storeLogo_ImageView.setImageBitmap((Bitmap) storeLogo.get(position));
+        }
+        /*
         holder.mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(context, com.example.diplomski.UpdateActivity.class);
-                intent.putExtra("id", String.valueOf(store_id.get(position)));
-                intent.putExtra("name", String.valueOf(store_name.get(position)));
+                intent.putExtra("id", String.valueOf(storeID.get(position)));
+                intent.putExtra("name", String.valueOf(storeName.get(position)));
+                intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));
                 context.startActivity(intent);
                 return true;
             }
         });
-
+        */
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, com.example.diplomski.BarcodeActivity.class);
-                intent.putExtra("id", String.valueOf(store_id.get(position)));
-                intent.putExtra("name", String.valueOf(store_name.get(position)));
-                context.startActivity(intent);
+                startBarcodeActivity();
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return store_id.size();
+        return storeID.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView store_id_txt, store_name_txt;
-        ImageView store_logo_img;
+        TextView storeName_textView;
+        ImageView storeLogo_ImageView;
         LinearLayout mainLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            store_name_txt = itemView.findViewById(R.id.store_name_txt);
-            store_logo_img = itemView.findViewById(R.id.logo_imageView);
+            storeName_textView = itemView.findViewById(R.id.store_name_txt);
+            storeLogo_ImageView = itemView.findViewById(R.id.logo_imageView);
             mainLayout = itemView.findViewById(R.id.mainLayout);
         }
+    }
+
+    private void startBarcodeActivity(){
+        Intent intent = new Intent(context, com.example.diplomski.BarcodeActivity.class);
+        intent.putExtra("id", String.valueOf(storeID.get(position)));
+        intent.putExtra("name", String.valueOf(storeName.get(position)));
+        intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));
+        context.startActivity(intent);
     }
 }
