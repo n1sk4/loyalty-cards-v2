@@ -1,6 +1,5 @@
 package com.example.diplomski;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -23,9 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,12 +59,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
-        add_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddNameActivity.class);
-                startActivity(intent);
-            }
+        add_fab.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddNameActivity.class);
+            startActivity(intent);
         });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
@@ -92,19 +87,13 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete All?");
         builder.setMessage("Are you sure you want to delete all Data?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                StoresDB myDB = new StoresDB(MainActivity.this);
-                myDB.deleteAllData();
-                recreate();
-            }
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            StoresDB myDB = new StoresDB(MainActivity.this);
+            myDB.deleteAllData();
+            recreate();
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setNegativeButton("No", (dialog, which) -> {
 
-            }
         });
         builder.create().show();
     }
@@ -121,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
             Collections.swap(store_id, fromPosition, toPosition);
 
-            recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
+            Objects.requireNonNull(recyclerView.getAdapter()).notifyItemMoved(fromPosition, toPosition);
 
             return false;
         }
