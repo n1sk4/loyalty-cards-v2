@@ -15,6 +15,6 @@
     <string name="store_web_txtView">www.web.com</string>
     <string name="store_name_txtView">Store Name</string>
     <string name="store_id_txtView">1</string>
-    <string name="update_logo_button">Update logo</string>
+    <string name="update_logo_button">Logo</string>
     <string name="add_a_barcode">Add a barcode</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.diplomski;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -67,15 +69,25 @@ public class StoresDB extends SQLiteOpenHelper {
     }
 
     String getStoreName(String row_id){
+        /*REMINDER
+         1. Create query:
+         e.g., SELECT 10, store_name FROM Stores.db
+         2. Create DB variable
+         3. Create cursor
+         4. Make rawQuery from the 1st step
+         5. Move the cursor to first position (because there's only one)
+         6. Get string from cursor on column index 1 (index 0 is id column)
+         e.g.,     0   |   1
+         id (10)| name10
+         */
         if(Integer.parseInt(row_id) > 0) {
             String query = "SELECT " + row_id + ", " + COLUMN_STORE + " FROM " + TABLE_NAME;
             SQLiteDatabase db = this.getReadableDatabase();
 
             Cursor cursor = db.rawQuery(query, null);
-            String test = cursor.getString(Integer.parseInt(row_id));
-            Toast.makeText(context, "TEST", Toast.LENGTH_SHORT).show();
+            cursor.moveToFirst();
             if (cursor != null) {
-                return cursor.getString(Integer.parseInt(row_id));
+                return cursor.getString(1);
             }
         }
         Toast.makeText(context, "Failed to find store name!", Toast.LENGTH_SHORT).show();
@@ -90,13 +102,22 @@ public class StoresDB extends SQLiteOpenHelper {
 
         long result = db.update(TABLE_NAME, cv,"_id=?", new String[]{row_id});
 
-        //TODO Delete in the future *Debugging helper*
-        if(result == -1){
-            Toast.makeText(context, "Failed to add store barcode", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(context, "Added successfully", Toast.LENGTH_SHORT).show();
-        }
         return result;
+    }
+
+    String getStoreBarcode(String row_id){
+        if(Integer.parseInt(row_id) > 0) {
+            String query = "SELECT " + row_id + ", " + COLUMN_BARCODE + " FROM " + TABLE_NAME;
+            SQLiteDatabase db = this.getReadableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+            cursor.moveToFirst();
+            if (cursor != null) {
+                return cursor.getString(1);
+            }
+        }
+        Toast.makeText(context, "Failed to find store name!", Toast.LENGTH_SHORT).show();
+        return "";
     }
 
     long addStoreLogo(String row_id, Bitmap storeLogo){
@@ -108,13 +129,24 @@ public class StoresDB extends SQLiteOpenHelper {
 
         long result = db.update(TABLE_NAME, cv,"_id=?", new String[]{row_id});
 
-        //TODO Delete in the future *Debugging helper*
-        if(result == -1){
-            Toast.makeText(context, "Failed to add store logo", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(context, "Added successfully", Toast.LENGTH_SHORT).show();
-        }
         return result;
+    }
+
+    Bitmap getStoreLogo(String row_id){
+        if(Integer.parseInt(row_id) > 0) {
+            String query = "SELECT " + row_id + ", " + COLUMN_LOGO + " FROM " + TABLE_NAME;
+            SQLiteDatabase db = this.getReadableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+
+            cursor.moveToFirst();
+            if (cursor != null) {
+                return BitmapFactory.decodeByteArray((cursor.getBlob(1)),
+                        0, (cursor.getBlob(1).length));
+            }
+        }
+        Toast.makeText(context, "Failed to find store logo!", Toast.LENGTH_SHORT).show();
+        return null;
     }
 
     Cursor readAllData(){

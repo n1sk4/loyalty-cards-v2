@@ -12,5 +12,12 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="materialButtonStyle">@style/buttons</item>
+        <item name="android:windowBackground">@color/gray</item>
+    </style>
+
+    <style name="fab_style" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/purple_500</item>
+        <item name="tint">@color/white</item>
     </style>
 </resources>

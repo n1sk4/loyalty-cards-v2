@@ -110,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
 
             Collections.swap(store_id, fromPosition, toPosition);
 
-            Objects.requireNonNull(recyclerView.getAdapter()).notifyItemMoved(fromPosition, toPosition);
+            Objects.requireNonNull(recyclerView.getAdapter()).
+                    notifyItemMoved(fromPosition, toPosition);
 
             return false;
         }

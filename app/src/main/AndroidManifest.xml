@@ -28,13 +28,13 @@
             android:exported="false"
             android:parentActivityName=".AddNameActivity" />
         <activity
-            android:name=".BarcodeActivity"
+            android:name=".ShowBarcodeActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".UpdateActivity"
+            android:name=".UpdateStoreActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".ShowBarcodeActivity" />
         <activity
             android:name=".AddActivity"
             android:exported="false"

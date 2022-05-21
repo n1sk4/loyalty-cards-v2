@@ -9,4 +9,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color>
     <color name="gray">#adbbdb</color>
+    <color name="toast_error">#FF3333</color>
+    <color name="toast_warning">#FFA133</color>
+    <color name="toast_info">#03FF00</color>
+    <color name="color_primary_day">#FF6200EE</color>
+    <color name="color_primary_night">#FFBB86FC</color>
+    <color name="color_onPrimary_day">#53B2BB</color>
+    <color name="color_onPrimary_night">#FF000000</color>
 </resources>

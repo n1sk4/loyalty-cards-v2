@@ -98,7 +98,7 @@ public class AddLogoActivity extends AppCompatActivity {
     }
 
     private void startBarcodeActivity(){
-        Intent intent = new Intent(AddLogoActivity.this, BarcodeActivity.class);
+        Intent intent = new Intent(AddLogoActivity.this, ShowBarcodeActivity.class);
         startActivity(intent);
     }
 

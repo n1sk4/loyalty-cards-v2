@@ -21,8 +21,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private Context context;
     private ArrayList storeID, storeName, storeBarcode, storeLogo;
 
-    int position;
-
     CustomAdapter(Context context,
                   ArrayList store_id,
                   ArrayList store_name,
@@ -55,7 +53,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent intent = new Intent(context, com.example.diplomski.UpdateActivity.class);
+                Intent intent = new Intent(context, com.example.diplomski.UpdateStoreActivity.class);
                 intent.putExtra("id", String.valueOf(storeID.get(position)));
                 intent.putExtra("name", String.valueOf(storeName.get(position)));
                 intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));
@@ -67,7 +65,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startBarcodeActivity();
+                startBarcodeActivity(position);
             }
         });
     }
@@ -90,8 +88,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         }
     }
 
-    private void startBarcodeActivity(){
-        Intent intent = new Intent(context, com.example.diplomski.BarcodeActivity.class);
+    private void startBarcodeActivity(int position){
+        Intent intent = new Intent(context, ShowBarcodeActivity.class);
         intent.putExtra("id", String.valueOf(storeID.get(position)));
         intent.putExtra("name", String.valueOf(storeName.get(position)));
         intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));

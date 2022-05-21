@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BarcodeActivity">
+    tools:context=".ShowBarcodeActivity"
+    android:padding="16dp">
+
 
     <ImageView
         android:id="@+id/barcode_Barcode_ImageView"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginStart="16dp"
+        android:layout_height="250dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
         android:padding="8dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,9 +24,7 @@
         android:id="@+id/editData_Barcode_Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:text="Edit data"
         app:layout_constraintBottom_toTopOf="@+id/closeActivity_Barcode_Button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,11 +35,20 @@
         android:id="@+id/closeActivity_Barcode_Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:text="Close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/editData_Barcode_Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barcode_Barcode_ImageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

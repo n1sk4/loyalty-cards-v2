@@ -6,14 +6,20 @@
         <entry key="..\:/_diplomskiRad/app/src/main/res/drawable/ic_add.xml" value="0.1635" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/drawable/ic_baseline_credit_score_24.xml" value="0.358" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/drawable/ic_delete.xml" value="0.358" />
-        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add.xml" value="0.2814814814814815" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/drawable/nav.xml" value="0.1" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/font/app_fonts.xml" value="0.3958333333333333" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add.xml" value="0.25" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add_barcode.xml" value="0.36666666666666664" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add_logo.xml" value="0.36666666666666664" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add_name.xml" value="0.36666666666666664" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_barcode.xml" value="0.36666666666666664" />
-        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_main.xml" value="0.2814814814814815" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_show_barcode.xml" value="0.36666666666666664" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_update.xml" value="0.33" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_update_store.xml" value="0.33" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/fragment_add_new.xml" value="0.22512820512820514" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/my_row.xml" value="0.36102564102564105" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/my_toast.xml" value="0.25" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/menu/update_item_menu.xml" value="0.2814814814814815" />
       </map>
     </option>

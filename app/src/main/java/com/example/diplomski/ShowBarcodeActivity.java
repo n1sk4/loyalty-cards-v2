@@ -1,7 +1,10 @@
 package com.example.diplomski;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -14,9 +17,11 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-public class BarcodeActivity extends AppCompatActivity {
+public class ShowBarcodeActivity extends AppCompatActivity {
 
     ImageView barcode_imageView;
+    Button editData_button;
+    Button close_button;
 
     String id, name, barcode;
 
@@ -25,7 +30,7 @@ public class BarcodeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_barcode);
+        setContentView(R.layout.activity_show_barcode);
 
         findViews();
 
@@ -33,15 +38,29 @@ public class BarcodeActivity extends AppCompatActivity {
 
         ActionBar ab = getSupportActionBar();
         if(name != null){
+            assert ab != null;
             ab.setTitle(name + " barcode");
         }
 
         generateBarcodeImage();
+
+        editData_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startUpdateActivity();
+            }
+        });
+
+        close_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMainActivity();
+            }
+        });
     }
 
     private void getIntentData(){
         if(getIntent().hasExtra("id") && getIntent().hasExtra("name")){
-            //Getting Data From Intent
             id = getIntent().getStringExtra("id");
             name = getIntent().getStringExtra("name");
             if(getIntent().hasExtra("barcode")){
@@ -63,7 +82,7 @@ public class BarcodeActivity extends AppCompatActivity {
         if(barcodeExists){
             try {
                 int width, height;
-                width = 750;
+                width = 800;
                 height = 1000;
                 BitMatrix matrix = writer.encode(barcode, BarcodeFormat.CODE_128, width, height);
                 BarcodeEncoder encoder = new BarcodeEncoder();
@@ -79,5 +98,18 @@ public class BarcodeActivity extends AppCompatActivity {
 
     private void findViews(){
         barcode_imageView = findViewById(R.id.barcode_Barcode_ImageView);
+        editData_button = findViewById(R.id.editData_Barcode_Button);
+        close_button = findViewById(R.id.closeActivity_Barcode_Button);
+    }
+
+    private void startUpdateActivity(){
+        Intent intent = new Intent(ShowBarcodeActivity.this, UpdateStoreActivity.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
+    }
+
+    private void startMainActivity(){
+        Intent intent = new Intent(ShowBarcodeActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
