@@ -20,10 +20,14 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 public class ShowBarcodeActivity extends AppCompatActivity {
 
     ImageView barcode_imageView;
+    ImageView logo_imageView;
     Button editData_button;
     Button close_button;
 
     String id, name, barcode;
+    Bitmap logo;
+
+    StoresDB myDB;
 
     boolean barcodeExists;
 
@@ -43,6 +47,7 @@ public class ShowBarcodeActivity extends AppCompatActivity {
         }
 
         generateBarcodeImage();
+        generateLogoImage();
 
         editData_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,26 +65,22 @@ public class ShowBarcodeActivity extends AppCompatActivity {
     }
 
     private void getIntentData(){
-        if(getIntent().hasExtra("id") && getIntent().hasExtra("name")){
+        if(getIntent().hasExtra("id")){
             id = getIntent().getStringExtra("id");
-            name = getIntent().getStringExtra("name");
-            if(getIntent().hasExtra("barcode")){
-                barcode = getIntent().getStringExtra("barcode");
-                barcodeExists = true;
-            }
-            else{
-                Toast.makeText(this, "Barcode doesn't exist for " + name
-                        + " store", Toast.LENGTH_SHORT).show();
-                barcodeExists = false;
-            }
+            myDB = new StoresDB(ShowBarcodeActivity.this);
+
+            name = myDB.getStoreName(id);
+            barcode = myDB.getStoreBarcode(id);
+            logo = myDB.getStoreLogo(id);
         }else{
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
+            startMainActivity();
         }
     }
 
     private void generateBarcodeImage(){
         MultiFormatWriter writer = new MultiFormatWriter();
-        if(barcodeExists){
+        if(!barcode.equals("")){
             try {
                 int width, height;
                 width = 800;
@@ -96,8 +97,18 @@ public class ShowBarcodeActivity extends AppCompatActivity {
         }
     }
 
+    private void generateLogoImage(){
+        if(logo != null){
+            logo_imageView.setVisibility(ImageView.VISIBLE);
+            logo_imageView.setImageBitmap(logo);
+        }else {
+            logo_imageView.setVisibility(ImageView.GONE);
+        }
+    }
+
     private void findViews(){
         barcode_imageView = findViewById(R.id.barcode_Barcode_ImageView);
+        logo_imageView = findViewById(R.id.logo_Barcode_ImageView);
         editData_button = findViewById(R.id.editData_Barcode_Button);
         close_button = findViewById(R.id.closeActivity_Barcode_Button);
     }

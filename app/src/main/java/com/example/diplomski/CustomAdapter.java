@@ -90,6 +90,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     private void startBarcodeActivity(int position){
         Intent intent = new Intent(context, ShowBarcodeActivity.class);
+        String id_1 = String.valueOf(storeID.get(position));
         intent.putExtra("id", String.valueOf(storeID.get(position)));
         intent.putExtra("name", String.valueOf(storeName.get(position)));
         intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));

@@ -68,6 +68,7 @@ public class StoresDB extends SQLiteOpenHelper {
         return result;
     }
 
+    @SuppressLint("Range")
     String getStoreName(String row_id){
         /*REMINDER
          1. Create query:
@@ -81,12 +82,13 @@ public class StoresDB extends SQLiteOpenHelper {
          id (10)| name10
          */
         if(Integer.parseInt(row_id) > 0) {
-            String query = "SELECT " + row_id + ", " + COLUMN_STORE + " FROM " + TABLE_NAME;
+            String query = "SELECT " + row_id + ", " + COLUMN_STORE + " FROM " + TABLE_NAME
+                    + " WHERE " + COLUMN_ID + "=?";
             SQLiteDatabase db = this.getReadableDatabase();
 
-            Cursor cursor = db.rawQuery(query, null);
+            Cursor cursor = db.rawQuery(query, new String[] {row_id + ""});
             cursor.moveToFirst();
-            if (cursor != null) {
+            if (cursor.getCount() > 0 && !cursor.isNull(1)) {
                 return cursor.getString(1);
             }
         }
@@ -107,12 +109,13 @@ public class StoresDB extends SQLiteOpenHelper {
 
     String getStoreBarcode(String row_id){
         if(Integer.parseInt(row_id) > 0) {
-            String query = "SELECT " + row_id + ", " + COLUMN_BARCODE + " FROM " + TABLE_NAME;
+            String query = "SELECT " + row_id + ", " + COLUMN_BARCODE + " FROM " + TABLE_NAME
+                    + " WHERE " + COLUMN_ID + "=?";
             SQLiteDatabase db = this.getReadableDatabase();
 
-            Cursor cursor = db.rawQuery(query, null);
+            Cursor cursor = db.rawQuery(query, new String[] {row_id + ""});
             cursor.moveToFirst();
-            if (cursor != null) {
+            if (cursor.getCount() > 0 && !cursor.isNull(1)) {
                 return cursor.getString(1);
             }
         }
@@ -134,13 +137,13 @@ public class StoresDB extends SQLiteOpenHelper {
 
     Bitmap getStoreLogo(String row_id){
         if(Integer.parseInt(row_id) > 0) {
-            String query = "SELECT " + row_id + ", " + COLUMN_LOGO + " FROM " + TABLE_NAME;
+            String query = "SELECT " + row_id + ", " + COLUMN_LOGO + " FROM " + TABLE_NAME
+                    + " WHERE " + COLUMN_ID + "=?";
             SQLiteDatabase db = this.getReadableDatabase();
 
-            Cursor cursor = db.rawQuery(query, null);
-
+            Cursor cursor = db.rawQuery(query, new String[] {row_id + ""});
             cursor.moveToFirst();
-            if (cursor != null) {
+            if (cursor.getCount() > 0 && !cursor.isNull(1)) {
                 return BitmapFactory.decodeByteArray((cursor.getBlob(1)),
                         0, (cursor.getBlob(1).length));
             }
