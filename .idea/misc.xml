@@ -20,6 +20,9 @@
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/fragment_add_new.xml" value="0.22512820512820514" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/my_row.xml" value="0.36102564102564105" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/my_toast.xml" value="0.25" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/menu/add_new_item_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/menu/main_activity_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/menu/update_activity_menu.xml" value="0.365625" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/menu/update_item_menu.xml" value="0.2814814814814815" />
       </map>
     </option>

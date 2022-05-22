@@ -39,7 +39,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="Loyalty card library">
+            android:label="Loyalty cards">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

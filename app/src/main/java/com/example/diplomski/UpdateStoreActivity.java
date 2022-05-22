@@ -2,24 +2,26 @@ package com.example.diplomski;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.palette.graphics.Palette;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -32,8 +34,10 @@ public class UpdateStoreActivity extends AppCompatActivity {
     EditText barcode_editText;
     Button update_button;
     Button delete_button;
+    Button back_button;
     Button scanBarcode_button;
     ImageView logo_imageView;
+    View layout;
 
     String id, name, barcode;
     Bitmap logo;
@@ -51,10 +55,12 @@ public class UpdateStoreActivity extends AppCompatActivity {
 
         getIntentData();
 
+        changeBackgroundColor(logo);
+
         ActionBar ab = getSupportActionBar();
         if(name != null){
             assert ab != null;
-            ab.setTitle(name);
+            ab.setTitle(name + " - edit store data");
         }
 
         update_button.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +83,11 @@ public class UpdateStoreActivity extends AppCompatActivity {
             public void onClick(View v) {
                 confirmDialog();
             }
+        });
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { startShowBarcodeActivity(); }
         });
 
         logo_imageView.setOnClickListener(new View.OnClickListener() {
@@ -131,13 +142,6 @@ public class UpdateStoreActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.update_item_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
     private void selectAndPlaceLogo(){
         CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(
                 UpdateStoreActivity.this);
@@ -165,10 +169,12 @@ public class UpdateStoreActivity extends AppCompatActivity {
     private void findViews(){
         name_editText = findViewById(R.id.storeName_Update_EditText);
         barcode_editText = findViewById(R.id.barcodeInput_Update_EditText);
-        update_button = findViewById(R.id.update_button);
-        delete_button = findViewById(R.id.delete_button);
+        update_button = findViewById(R.id.update_Update_Button);
+        delete_button = findViewById(R.id.delete_Update_Button);
+        back_button = findViewById(R.id.return_Update_Button);
         scanBarcode_button = findViewById(R.id.scanBarcode_Update_Button);
-        logo_imageView = findViewById(R.id.addLogo_imageView);
+        logo_imageView = findViewById(R.id.addLogo_Update_ImageView);
+        layout = findViewById(R.id.layout_Update);
     }
 
     private void startMainActivity(){
@@ -181,5 +187,15 @@ public class UpdateStoreActivity extends AppCompatActivity {
         Intent intent = new Intent(UpdateStoreActivity.this, ShowBarcodeActivity.class);
         intent.putExtra("id", id);
         startActivity(intent);
+    }
+
+    private void changeBackgroundColor(Bitmap bitmap){
+        if(logo != null){
+            Palette.from(bitmap).generate(palette -> {
+                assert palette != null;
+                layout.setBackgroundColor(palette.getDominantColor(ContextCompat
+                        .getColor(UpdateStoreActivity.this, R.color.white)));
+            });
+        }
     }
 }

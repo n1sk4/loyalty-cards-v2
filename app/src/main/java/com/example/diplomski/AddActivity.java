@@ -178,7 +178,7 @@ public class AddActivity extends AppCompatActivity {
         add_button = findViewById(R.id.add_button);
         addLogo_button = findViewById(R.id.add_logo);
         addBarcode_button = findViewById(R.id.add_barcode);
-        logo_imageView = findViewById(R.id.addLogo_imageView);
+        logo_imageView = findViewById(R.id.addLogo_Update_ImageView);
         barcode_imageView = findViewById(R.id.barcode_ImageView);
     }
 }

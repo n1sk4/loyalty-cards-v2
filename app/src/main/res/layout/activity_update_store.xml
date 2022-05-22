@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddActivity"
-    android:padding="30dp">
+    android:padding="30dp"
+    android:id="@+id/layout_Update">
 
     <EditText
         android:id="@+id/barcodeInput_Update_EditText"
@@ -37,16 +38,16 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/update_button"
+        android:id="@+id/update_Update_Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/update_button"
-        app:layout_constraintBottom_toTopOf="@+id/delete_button"
+        app:layout_constraintBottom_toTopOf="@+id/delete_Update_Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/delete_button"
+        android:id="@+id/delete_Update_Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -57,7 +58,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/addLogo_imageView"
+        android:id="@+id/addLogo_Update_ImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -106,7 +107,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Return"
-        app:layout_constraintBottom_toTopOf="@+id/update_button"
+        app:layout_constraintBottom_toTopOf="@+id/update_Update_Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.46"
         app:layout_constraintStart_toStartOf="parent" />
