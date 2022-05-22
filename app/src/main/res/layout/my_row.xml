@@ -17,7 +17,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:id="@+id/individualLayout">
 
             <TextView
                 android:id="@+id/store_name_txt"
@@ -30,7 +31,12 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/logo_imageView"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/black"
+                android:shadowColor="@color/white"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="4"/>
 
             <ImageView
                 android:id="@+id/logo_imageView"
@@ -39,7 +45,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_shopping_bag">
+                app:srcCompat="@drawable/ic_shopping_bag"
+                app:tint="@color/gray">
             </ImageView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,15 +1,19 @@
 package com.example.diplomski;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.palette.graphics.Palette;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -23,6 +27,8 @@ public class ShowBarcodeActivity extends AppCompatActivity {
     ImageView logo_imageView;
     Button editData_button;
     Button close_button;
+    TextView barcode_text;
+    View layout;
 
     String id, name, barcode;
     Bitmap logo;
@@ -48,6 +54,8 @@ public class ShowBarcodeActivity extends AppCompatActivity {
 
         generateBarcodeImage();
         generateLogoImage();
+
+        changeBackgroundColor(logo);
 
         editData_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +86,7 @@ public class ShowBarcodeActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     private void generateBarcodeImage(){
         MultiFormatWriter writer = new MultiFormatWriter();
         if(!barcode.equals("")){
@@ -89,10 +98,14 @@ public class ShowBarcodeActivity extends AppCompatActivity {
                 BarcodeEncoder encoder = new BarcodeEncoder();
                 Bitmap bitmap = encoder.createBitmap(matrix);
                 barcode_imageView.setImageBitmap(bitmap);
+                barcode_text.setText(barcode);
+                barcode_text.setTextColor(R.color.black);
             } catch (WriterException e) {
                 e.printStackTrace();
             }
         }else {
+            barcode_text.setTextColor(R.color.gray);
+            barcode_text.setText("BARCODE MISSING");
             //TODO Do something
         }
     }
@@ -111,6 +124,8 @@ public class ShowBarcodeActivity extends AppCompatActivity {
         logo_imageView = findViewById(R.id.logo_Barcode_ImageView);
         editData_button = findViewById(R.id.editData_Barcode_Button);
         close_button = findViewById(R.id.closeActivity_Barcode_Button);
+        barcode_text = findViewById(R.id.barcodeText_Barcode_TextView);
+        layout = findViewById(R.id.showBarcode_Layout);
     }
 
     private void startUpdateActivity(){
@@ -122,5 +137,15 @@ public class ShowBarcodeActivity extends AppCompatActivity {
     private void startMainActivity(){
         Intent intent = new Intent(ShowBarcodeActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private void changeBackgroundColor(Bitmap bitmap){
+        if(logo != null){
+            Palette.from(bitmap).generate(palette -> {
+                assert palette != null;
+                layout.setBackgroundColor(palette.getDominantColor(ContextCompat
+                        .getColor(ShowBarcodeActivity.this, R.color.white)));
+            });
+        }
     }
 }

@@ -12,6 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -48,7 +51,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.storeName_textView.setText(String.valueOf(storeName.get(position)));
         if(storeLogo.get(position) != null){
             holder.storeLogo_ImageView.setImageBitmap((Bitmap) storeLogo.get(position));
+            holder.storeLogo_ImageView.setImageTintList(null);
+            Palette.from((Bitmap) storeLogo.get(position)).generate(palette -> {
+                assert palette != null;
+                holder.individualLayout.setBackgroundColor(palette.getDominantColor(ContextCompat.
+                        getColor(context, R.color.white)));
+            });
         }
+
         /*
         holder.mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -79,21 +89,24 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         TextView storeName_textView;
         ImageView storeLogo_ImageView;
         LinearLayout mainLayout;
+        ConstraintLayout individualLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             storeName_textView = itemView.findViewById(R.id.store_name_txt);
             storeLogo_ImageView = itemView.findViewById(R.id.logo_imageView);
             mainLayout = itemView.findViewById(R.id.mainLayout);
+            individualLayout = itemView.findViewById(R.id.individualLayout);
         }
     }
 
     private void startBarcodeActivity(int position){
         Intent intent = new Intent(context, ShowBarcodeActivity.class);
-        String id_1 = String.valueOf(storeID.get(position));
         intent.putExtra("id", String.valueOf(storeID.get(position)));
         intent.putExtra("name", String.valueOf(storeName.get(position)));
         intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));
         context.startActivity(intent);
     }
+
+
 }

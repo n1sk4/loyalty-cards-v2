@@ -53,34 +53,12 @@ public class StoresDB extends SQLiteOpenHelper {
     long addStoreName(String storeName){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-
         cv.put(COLUMN_STORE, storeName);
-
-        long result = db.insert(TABLE_NAME, null, cv);
-
-        //TODO Delete in the future *Debugging helper*
-        if(result == -1){
-            Toast.makeText(context, "Failed to add store name", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(context, "Added successfully", Toast.LENGTH_SHORT).show();
-        }
-
-        return result;
+        return db.insert(TABLE_NAME, null, cv);
     }
 
     @SuppressLint("Range")
     String getStoreName(String row_id){
-        /*REMINDER
-         1. Create query:
-         e.g., SELECT 10, store_name FROM Stores.db
-         2. Create DB variable
-         3. Create cursor
-         4. Make rawQuery from the 1st step
-         5. Move the cursor to first position (because there's only one)
-         6. Get string from cursor on column index 1 (index 0 is id column)
-         e.g.,     0   |   1
-         id (10)| name10
-         */
         if(Integer.parseInt(row_id) > 0) {
             String query = "SELECT " + row_id + ", " + COLUMN_STORE + " FROM " + TABLE_NAME
                     + " WHERE " + COLUMN_ID + "=?";
@@ -92,19 +70,14 @@ public class StoresDB extends SQLiteOpenHelper {
                 return cursor.getString(1);
             }
         }
-        Toast.makeText(context, "Failed to find store name!", Toast.LENGTH_SHORT).show();
         return "";
     }
 
     long addStoreBarcode(String row_id, String storeBarcode){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-
         cv.put(COLUMN_BARCODE, storeBarcode);
-
-        long result = db.update(TABLE_NAME, cv,"_id=?", new String[]{row_id});
-
-        return result;
+        return db.update(TABLE_NAME, cv,"_id=?", new String[]{row_id});
     }
 
     String getStoreBarcode(String row_id){
@@ -119,7 +92,6 @@ public class StoresDB extends SQLiteOpenHelper {
                 return cursor.getString(1);
             }
         }
-        Toast.makeText(context, "Failed to find store name!", Toast.LENGTH_SHORT).show();
         return "";
     }
 
@@ -127,12 +99,8 @@ public class StoresDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         byte[] image = getBitmapAsByteArray(storeLogo);
-
         cv.put(COLUMN_LOGO, image);
-
-        long result = db.update(TABLE_NAME, cv,"_id=?", new String[]{row_id});
-
-        return result;
+        return db.update(TABLE_NAME, cv,"_id=?", new String[]{row_id});
     }
 
     Bitmap getStoreLogo(String row_id){
@@ -148,23 +116,20 @@ public class StoresDB extends SQLiteOpenHelper {
                         0, (cursor.getBlob(1).length));
             }
         }
-        Toast.makeText(context, "Failed to find store logo!", Toast.LENGTH_SHORT).show();
         return null;
     }
 
     Cursor readAllData(){
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
-
         Cursor cursor = null;
-
         if(db != null){
             cursor = db.rawQuery(query,null);
         }
         return cursor;
     }
 
-    void updateData(String row_id, String storeName, String storeBarcode, Bitmap storeLogo){
+    long updateData(String row_id, String storeName, String storeBarcode, Bitmap storeLogo){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         byte[] image = getBitmapAsByteArray(storeLogo);
@@ -173,24 +138,12 @@ public class StoresDB extends SQLiteOpenHelper {
         cv.put(COLUMN_BARCODE, storeBarcode);
         cv.put(COLUMN_LOGO, image);
 
-        long result_name = db.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
-
-        if (result_name == -1){
-            Toast.makeText(context, "Failed to update!", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Updated successfully!", Toast.LENGTH_SHORT).show();
-        }
+        return db.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
     }
 
-    void deleteOneRow(String row_id){
+    long deleteOneRow(String row_id){
         SQLiteDatabase db = this.getWritableDatabase();
-        long result = db.delete(TABLE_NAME, "_id=?", new String[]{row_id});
-
-        if(result == -1){
-            Toast.makeText(context, "Failed to Delete!", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Successfully Deleted!", Toast.LENGTH_SHORT).show();
-        }
+        return db.delete(TABLE_NAME, "_id=?", new String[]{row_id});
     }
 
     void deleteAllData(){

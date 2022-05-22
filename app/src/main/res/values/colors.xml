@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color>
     <color name="gray">#adbbdb</color>
+    <color name="light_gray">#bfc6de</color>
     <color name="toast_error">#FF3333</color>
     <color name="toast_warning">#FFA133</color>
     <color name="toast_info">#03FF00</color>
