@@ -132,11 +132,13 @@ public class StoresDB extends SQLiteOpenHelper {
     long updateData(String row_id, String storeName, String storeBarcode, Bitmap storeLogo){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        byte[] image = getBitmapAsByteArray(storeLogo);
 
-        cv.put(COLUMN_STORE, storeName);
-        cv.put(COLUMN_BARCODE, storeBarcode);
-        cv.put(COLUMN_LOGO, image);
+        if(storeName != null) cv.put(COLUMN_STORE, storeName);
+        if(storeBarcode != null) cv.put(COLUMN_BARCODE, storeBarcode);
+        if(storeLogo != null){
+            byte[] image = getBitmapAsByteArray(storeLogo);
+            cv.put(COLUMN_LOGO, image);
+        }
 
         return db.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
     }
