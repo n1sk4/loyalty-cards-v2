@@ -74,7 +74,7 @@ public class UpdateStoreActivity extends AppCompatActivity {
                     assert ab != null;
                     ab.setTitle(name);
                 }
-                startMainActivity();
+                startShowBarcodeActivity();
             }
         });
 
