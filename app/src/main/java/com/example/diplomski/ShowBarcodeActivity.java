@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,7 +51,7 @@ public class ShowBarcodeActivity extends AppCompatActivity {
         getIntentData();
 
         ActionBar ab = getSupportActionBar();
-        if(name != null){
+        if (name != null) {
             assert ab != null;
             ab.setTitle(name + " barcode");
         }
@@ -59,17 +61,19 @@ public class ShowBarcodeActivity extends AppCompatActivity {
 
         changeBackgroundColor(logo);
 
+        animateBarcode();
+
         barcode_imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(barcode.equals(""))startUpdateActivity();
+                if (barcode.equals("")) startUpdateActivity();
             }
         });
 
         logo_imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(logo == null)startUpdateActivity();
+                if (logo == null) startUpdateActivity();
             }
         });
 
@@ -88,24 +92,24 @@ public class ShowBarcodeActivity extends AppCompatActivity {
         });
     }
 
-    private void getIntentData(){
-        if(getIntent().hasExtra("id")){
+    private void getIntentData() {
+        if (getIntent().hasExtra("id")) {
             id = getIntent().getStringExtra("id");
             myDB = new StoresDB(ShowBarcodeActivity.this);
 
             name = myDB.getStoreName(id);
             barcode = myDB.getStoreBarcode(id);
             logo = myDB.getStoreLogo(id);
-        }else{
+        } else {
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
             startMainActivity();
         }
     }
 
     @SuppressLint("ResourceAsColor")
-    private void generateBarcodeImage(){
+    private void generateBarcodeImage() {
         MultiFormatWriter writer = new MultiFormatWriter();
-        if(!barcode.equals("")){
+        if (!barcode.equals("")) {
             try {
                 int width, height;
                 width = 800;
@@ -119,23 +123,23 @@ public class ShowBarcodeActivity extends AppCompatActivity {
             } catch (WriterException e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             barcode_text.setTextColor(R.color.gray);
             barcode_text.setText("BARCODE MISSING");
             //TODO Do something
         }
     }
 
-    private void generateLogoImage(){
-        if(logo != null){
+    private void generateLogoImage() {
+        if (logo != null) {
             logo_imageView.setVisibility(ImageView.VISIBLE);
             logo_imageView.setImageBitmap(logo);
-        }else {
+        } else {
             logo_imageView.setVisibility(ImageView.GONE);
         }
     }
 
-    private void findViews(){
+    private void findViews() {
         barcode_imageView = findViewById(R.id.barcode_Barcode_ImageView);
         logo_imageView = findViewById(R.id.logo_Barcode_ImageView);
         editData_button = findViewById(R.id.editData_Barcode_Button);
@@ -144,19 +148,19 @@ public class ShowBarcodeActivity extends AppCompatActivity {
         layout = findViewById(R.id.showBarcode_Layout);
     }
 
-    private void startUpdateActivity(){
+    private void startUpdateActivity() {
         Intent intent = new Intent(ShowBarcodeActivity.this, UpdateStoreActivity.class);
         intent.putExtra("id", id);
         startActivity(intent);
     }
 
-    private void startMainActivity(){
+    private void startMainActivity() {
         Intent intent = new Intent(ShowBarcodeActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
-    private void changeBackgroundColor(Bitmap bitmap){
-        if(logo != null){
+    private void changeBackgroundColor(Bitmap bitmap) {
+        if (logo != null) {
             Palette.from(bitmap).generate(palette -> {
                 assert palette != null;
                 layout.setBackgroundColor(palette.getDominantColor(ContextCompat
@@ -174,14 +178,22 @@ public class ShowBarcodeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.brightness_Barcode_Menu){
+        if (item.getItemId() == R.id.brightness_Barcode_Menu) {
             changeScreenBrightness();
         }
         changeScreenBrightness();
         return super.onOptionsItemSelected(item);
     }
 
-    private void changeScreenBrightness(){
+    private void changeScreenBrightness() {
         //TODO Change brightness via Menu Switch
+    }
+
+    private void animateBarcode() {
+        if (!barcode.equals("")) {
+            Animation animation = AnimationUtils.loadAnimation(ShowBarcodeActivity.this, R.anim.show_barcode_animation);
+            animation.setFillAfter(true);
+            barcode_imageView.startAnimation(animation);
+        }
     }
 }

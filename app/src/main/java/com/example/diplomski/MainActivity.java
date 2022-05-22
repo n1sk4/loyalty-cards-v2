@@ -9,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     TextView noData_textView;
     ImageView noData_imageView;
+    View fabCircle_View;
 
     StoresDB myDB;
     ArrayList<String> store_id, store_name, store_barcode;
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
         add_fab.setOnClickListener(v -> {
+            animateFAB();
             Intent intent = new Intent(MainActivity.this, AddNameActivity.class);
             startActivity(intent);
         });
@@ -127,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         add_fab = findViewById(R.id.add_button);
         noData_textView = findViewById(R.id.no_data);
         noData_imageView = findViewById(R.id.no_data_imageView);
+        fabCircle_View = findViewById(R.id.fabCircle_Main_View);
     }
 
     private void storeDataInArrays(){
@@ -151,5 +156,11 @@ public class MainActivity extends AppCompatActivity {
             noData_imageView.setVisibility(View.GONE);
             noData_textView.setVisibility(View.GONE);
         }
+    }
+
+    private void animateFAB(){
+        Animation animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.main_layout_fab_circle_animation);
+        animation.setFillAfter(true);
+        fabCircle_View.startAnimation(animation);
     }
 }

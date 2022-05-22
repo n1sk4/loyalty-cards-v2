@@ -30,6 +30,19 @@
         android:src="@drawable/ic_add">
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
+    <View
+        android:id="@+id/fabCircle_Main_View"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/main_layout_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/add_button"
+        app:layout_constraintEnd_toEndOf="@+id/add_button"
+        app:layout_constraintStart_toStartOf="@+id/add_button"
+        app:layout_constraintTop_toTopOf="@+id/add_button"
+        android:background="@color/purple_500"
+        android:visibility="invisible">
+    </View>
+
     <ImageView
         android:id="@+id/no_data_imageView"
         android:layout_width="100dp"
