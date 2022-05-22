@@ -78,6 +78,19 @@ public class UpdateStoreActivity extends AppCompatActivity {
                 confirmDialog();
             }
         });
+
+        logo_imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectAndPlaceLogo();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        startShowBarcodeActivity();
+        super.onBackPressed();
     }
 
     void getIntentData(){
@@ -140,6 +153,7 @@ public class UpdateStoreActivity extends AppCompatActivity {
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(
                             this.getContentResolver(), resultUri);
+                    logo = bitmap;
                     logo_imageView.setImageBitmap(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -160,6 +174,12 @@ public class UpdateStoreActivity extends AppCompatActivity {
     private void startMainActivity(){
         Intent intent = new Intent(UpdateStoreActivity.this,
                 com.example.diplomski.MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void startShowBarcodeActivity(){
+        Intent intent = new Intent(UpdateStoreActivity.this, ShowBarcodeActivity.class);
+        intent.putExtra("id", id);
         startActivity(intent);
     }
 }

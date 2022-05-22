@@ -17,7 +17,7 @@
         android:inputType="number"
         android:textAlignment="center"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/barcodeHint_Barcode_textView"
+        app:layout_constraintBottom_toTopOf="@+id/barcodeHint_Update_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -25,13 +25,13 @@
         android:id="@+id/storeName_Update_EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="156dp"
+        android:layout_marginBottom="100dp"
         android:ems="10"
         android:hint="@string/enter_store_name_update"
         android:inputType="textPersonName"
         android:textAlignment="center"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/update_button"
+        app:layout_constraintBottom_toTopOf="@+id/return_Update_Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
@@ -40,7 +40,6 @@
         android:id="@+id/update_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:text="@string/update_button"
         app:layout_constraintBottom_toTopOf="@+id/delete_button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,12 +49,12 @@
         android:id="@+id/delete_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/red"
         android:text="@string/delete_button_update"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:backgroundTint="@color/red"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/addLogo_imageView"
@@ -91,7 +90,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/barcodeHint_Barcode_textView"
+        android:id="@+id/barcodeHint_Update_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -100,6 +99,16 @@
         app:layout_constraintBottom_toTopOf="@+id/storeName_Update_EditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/return_Update_Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Return"
+        app:layout_constraintBottom_toTopOf="@+id/update_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.46"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

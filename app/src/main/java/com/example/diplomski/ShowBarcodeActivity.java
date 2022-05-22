@@ -35,8 +35,6 @@ public class ShowBarcodeActivity extends AppCompatActivity {
 
     StoresDB myDB;
 
-    boolean barcodeExists;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +54,20 @@ public class ShowBarcodeActivity extends AppCompatActivity {
         generateLogoImage();
 
         changeBackgroundColor(logo);
+
+        barcode_imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(barcode.equals(""))startUpdateActivity();
+            }
+        });
+
+        logo_imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(logo == null)startUpdateActivity();
+            }
+        });
 
         editData_button.setOnClickListener(new View.OnClickListener() {
             @Override

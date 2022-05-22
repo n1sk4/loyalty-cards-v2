@@ -15,6 +15,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -113,6 +114,12 @@ public class AddBarcodeActivity extends AppCompatActivity {
                 selectAndPlaceBarcode();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        startAddNameActivity();
+        super.onBackPressed();
     }
 
     private void generateBarcodeImage(){

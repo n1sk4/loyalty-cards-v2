@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,6 +27,16 @@ public class AddNameActivity extends AppCompatActivity {
         findViews();
 
         getIntentData();
+
+
+        changeNextButtonVisibility();
+        storeName_editText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                changeNextButtonVisibility();
+                return false;
+            }
+        });
 
         next_button.setOnClickListener(v -> {
             if(storeName_editText.getText().toString().trim().length() <= 0){
@@ -55,8 +67,10 @@ public class AddNameActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Exit");
         builder.setMessage("Are you sure you want to cancel new loyalty card input?");
-        builder.setPositiveButton("Yes", (dialog, which) -> startMainActivity());
-        builder.setNegativeButton("No", (dialog, which) -> discardOrSaveDataDialog());
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            if(storeName_editText.getText().length() < 0) discardOrSaveDataDialog();
+            else startMainActivity();});
+        builder.setNegativeButton("No", (dialog, which) -> {/*do nothing*/});
         builder.create().show();
     }
 
@@ -111,6 +125,14 @@ public class AddNameActivity extends AppCompatActivity {
             StoresDB myDB = new StoresDB(AddNameActivity.this);
             storeName_editText.setText(myDB.getStoreName(database_id));
             Toast.makeText(this, "Intent" + database_id, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void changeNextButtonVisibility(){
+        if(storeName_editText.getText().length() <= 0){
+            next_button.setVisibility(Button.GONE);
+        }else{
+            next_button.setVisibility(Button.VISIBLE);
         }
     }
 }
