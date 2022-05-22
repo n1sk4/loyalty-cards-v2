@@ -63,9 +63,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
         add_fab.setOnClickListener(v -> {
-            animateFAB();
-            Intent intent = new Intent(MainActivity.this, AddNameActivity.class);
-            startActivity(intent);
+            animateFABAndStartActivity();
         });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
@@ -158,9 +156,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void animateFAB(){
-        Animation animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.main_layout_fab_circle_animation);
+    private void startAddNameActivity(){
+        Intent intent = new Intent(MainActivity.this, AddNameActivity.class);
+        startActivity(intent);
+    }
+
+    private void animateFABAndStartActivity(){
+        Animation animation = AnimationUtils.loadAnimation(MainActivity.this,
+                R.anim.main_layout_fab_circle_animation);
         animation.setFillAfter(true);
         fabCircle_View.startAnimation(animation);
+        fabCircle_View.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startAddNameActivity();
+            }
+        }, 350);
     }
 }

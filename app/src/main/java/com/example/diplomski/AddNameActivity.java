@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ public class AddNameActivity extends AppCompatActivity {
     Button next_button;
     Button cancel_button;
     EditText storeName_editText;
+    View animationView;
 
     String database_id;
 
@@ -25,9 +28,8 @@ public class AddNameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_name);
 
         findViews();
-
+        animateIntro();
         getIntentData();
-
 
         changeNextButtonVisibility();
         storeName_editText.setOnKeyListener(new View.OnKeyListener() {
@@ -105,6 +107,7 @@ public class AddNameActivity extends AppCompatActivity {
         next_button = findViewById(R.id.next_AddName_Button);
         cancel_button = findViewById(R.id.cancel_AddName_Button);
         storeName_editText = findViewById(R.id.editStoreName_AddName_EditText);
+        animationView = findViewById(R.id.animationBox);
     }
 
     private void storeNameToDatabase(){
@@ -124,7 +127,6 @@ public class AddNameActivity extends AppCompatActivity {
             database_id = getIntent().getStringExtra("id");
             StoresDB myDB = new StoresDB(AddNameActivity.this);
             storeName_editText.setText(myDB.getStoreName(database_id));
-            Toast.makeText(this, "Intent" + database_id, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -134,5 +136,18 @@ public class AddNameActivity extends AppCompatActivity {
         }else{
             next_button.setVisibility(Button.VISIBLE);
         }
+    }
+
+    private void animateIntro(){
+        Animation animation = AnimationUtils.loadAnimation(AddNameActivity.this,
+                R.anim.main_to_add_name_animation);
+        animation.setFillAfter(true);
+        animationView.startAnimation(animation);
+        animationView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animationView.setVisibility(View.GONE);
+            }
+        }, 750);
     }
 }

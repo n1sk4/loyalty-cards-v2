@@ -6,5 +6,5 @@
         android:fromYScale="0"
         android:toXScale="40"
         android:toYScale="40"
-        android:duration="1000"/>
+        android:duration="750"/>
 </set>

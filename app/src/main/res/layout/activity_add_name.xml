@@ -68,4 +68,15 @@
         app:layout_constraintEnd_toStartOf="@+id/next_AddName_Button"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <View
+        android:id="@+id/animationBox"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:src="@drawable/main_layout_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout2"
+        android:background="@color/gray"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
