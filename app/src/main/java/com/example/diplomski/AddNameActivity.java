@@ -18,7 +18,6 @@ public class AddNameActivity extends AppCompatActivity {
     Button next_button;
     Button cancel_button;
     EditText storeName_editText;
-    View animationView;
 
     String database_id;
 
@@ -28,7 +27,6 @@ public class AddNameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_name);
 
         findViews();
-        animateIntro();
         getIntentData();
 
         changeNextButtonVisibility();
@@ -107,7 +105,6 @@ public class AddNameActivity extends AppCompatActivity {
         next_button = findViewById(R.id.next_AddName_Button);
         cancel_button = findViewById(R.id.cancel_AddName_Button);
         storeName_editText = findViewById(R.id.editStoreName_AddName_EditText);
-        animationView = findViewById(R.id.animationBox);
     }
 
     private void storeNameToDatabase(){
@@ -138,16 +135,9 @@ public class AddNameActivity extends AppCompatActivity {
         }
     }
 
-    private void animateIntro(){
-        Animation animation = AnimationUtils.loadAnimation(AddNameActivity.this,
-                R.anim.main_to_add_name_animation);
-        animation.setFillAfter(true);
-        animationView.startAnimation(animation);
-        animationView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                animationView.setVisibility(View.GONE);
-            }
-        }, 750);
+    @Override
+    public void onBackPressed() {
+        startMainActivity();
+        super.onBackPressed();
     }
 }

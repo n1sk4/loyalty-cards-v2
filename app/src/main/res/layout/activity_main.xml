@@ -34,14 +34,28 @@
         android:id="@+id/fabCircle_Main_View"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/main_layout_circle"
         app:layout_constraintBottom_toBottomOf="@+id/add_button"
         app:layout_constraintEnd_toEndOf="@+id/add_button"
         app:layout_constraintStart_toStartOf="@+id/add_button"
         app:layout_constraintTop_toTopOf="@+id/add_button"
-        android:background="@color/purple_500"
+        android:background="@drawable/main_layout_circle"
         android:visibility="invisible">
     </View>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADD NEW STORE!"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/add_button"
+        app:layout_constraintEnd_toEndOf="@+id/add_button"
+        app:layout_constraintStart_toStartOf="@+id/add_button"
+        app:layout_constraintTop_toTopOf="@+id/add_button"
+        android:textSize="5sp"
+        android:visibility="visible">
+    </TextView>
 
     <ImageView
         android:id="@+id/no_data_imageView"
