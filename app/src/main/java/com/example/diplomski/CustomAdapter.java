@@ -21,14 +21,15 @@ import java.util.ArrayList;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
-    private Context context;
-    private ArrayList storeID, storeName, storeBarcode, storeLogo;
+    private final Context context;
+    private final ArrayList<String> storeID, storeName, storeBarcode;
+    private final ArrayList<Bitmap> storeLogo;
 
     CustomAdapter(Context context,
-                  ArrayList store_id,
-                  ArrayList store_name,
-                  ArrayList store_barcode,
-                  ArrayList store_logo){
+                  ArrayList<String> store_id,
+                  ArrayList<String> store_name,
+                  ArrayList<String> store_barcode,
+                  ArrayList<Bitmap> store_logo){
 
         this.context = context;
         this.storeID = store_id;
@@ -47,7 +48,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-
         holder.storeName_textView.setText(String.valueOf(storeName.get(position)));
         if(storeLogo.get(position) != null){
             holder.storeLogo_ImageView.setImageBitmap((Bitmap) storeLogo.get(position));
@@ -63,11 +63,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent intent = new Intent(context, com.example.diplomski.UpdateStoreActivity.class);
-                intent.putExtra("id", String.valueOf(storeID.get(position)));
-                intent.putExtra("name", String.valueOf(storeName.get(position)));
-                intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));
-                context.startActivity(intent);
+                //TODO Open menu /edit/delete/move/
                 return true;
             }
         });
@@ -85,7 +81,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return storeID.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView storeName_textView;
         ImageView storeLogo_ImageView;
         LinearLayout mainLayout;
@@ -107,6 +103,4 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));
         context.startActivity(intent);
     }
-
-
 }

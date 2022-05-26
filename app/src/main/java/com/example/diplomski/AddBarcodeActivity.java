@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -44,6 +45,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class AddBarcodeActivity extends AppCompatActivity {
     Button captureImage_button;
@@ -56,14 +58,25 @@ public class AddBarcodeActivity extends AppCompatActivity {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch barcodeQR_switch;
 
-    String database_id;
+    StoresDB myDB;
+
     String barcodeNumber;
     boolean switchSelection = false; //false = barcode; true = QR code
+
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_barcode);
+
+        myDB = new StoresDB(AddBarcodeActivity.this);
+        pref = getApplicationContext().
+                getSharedPreferences("store_id", MODE_PRIVATE);
+        editor = pref.edit();
+
+        myDB = new StoresDB(AddBarcodeActivity.this);
 
         findViews();
 
@@ -73,6 +86,8 @@ public class AddBarcodeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 generateBarcodeImage();
+                storeBarcodeToDatabase();
+                Toast.makeText(AddBarcodeActivity.this, "GENERATE SAVED TO DB", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -83,7 +98,9 @@ public class AddBarcodeActivity extends AppCompatActivity {
                     confirmNoBarcodeDialog();
                 }
                 else{
-                    storeBarcodeToDatabase();
+                    if(myDB.getStoreBarcode(pref.getString("id", null)) == null){
+                        storeBarcodeToDatabase();
+                    }
                     startAddLogoActivity();
                 }
             }
@@ -119,7 +136,6 @@ public class AddBarcodeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         startAddNameActivity();
-        super.onBackPressed();
     }
 
     private void generateBarcodeImage(){
@@ -154,11 +170,9 @@ public class AddBarcodeActivity extends AppCompatActivity {
                 );
                 manager.hideSoftInputFromWindow(barcode_textView.getApplicationWindowToken(), 0);
                 if(switchSelection){
-                    Toast.makeText(AddBarcodeActivity.this,
-                            "QR code generated successfully!", Toast.LENGTH_SHORT).show();
+                    //TODO Save QR flag in database
                 }else {
-                    Toast.makeText(AddBarcodeActivity.this,
-                            "Barcode generated successfully!", Toast.LENGTH_SHORT).show();
+                    //TODO Save 1D barcode in database
                 }
             } catch (WriterException e) {
                 e.printStackTrace();
@@ -186,6 +200,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
         if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if(resultCode == RESULT_OK){
+                assert result != null;
                 Uri resultUri = result.getUri();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(
@@ -265,38 +280,13 @@ public class AddBarcodeActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-    private void returnToAddNameDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add store name");
-        builder.setMessage("Do you want to add store name?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startAddNameActivity();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.create().show();
-    }
-
     private void startAddLogoActivity(){
         Intent intent = new Intent(AddBarcodeActivity.this, AddLogoActivity.class);
-        if(database_id != null){
-            intent.putExtra("id", database_id);
-        }
         startActivity(intent);
     }
 
     private void startAddNameActivity(){
         Intent intent = new Intent(AddBarcodeActivity.this, AddNameActivity.class);
-        if(database_id != null){
-            intent.putExtra("id", database_id);
-        }
         startActivity(intent);
     }
 
@@ -312,22 +302,23 @@ public class AddBarcodeActivity extends AppCompatActivity {
     }
 
     private void getIntentData(){
-        if(getIntent().hasExtra("id")){
-            database_id = getIntent().getStringExtra("id");
+        if(pref.getString("id", null) != null) {
+            if (myDB.getStoreBarcode(pref.getString("id", null)) != null) {
+                barcodeNumber_editText.setText(myDB.getStoreBarcode(pref.getString("id", null)));
+            }
         }
     }
 
     private void storeBarcodeToDatabase(){
-        StoresDB myDB = new StoresDB(AddBarcodeActivity.this);
         barcodeNumber = barcodeNumber_editText.getText().toString().trim();
-        if(database_id == null) {
+        if(pref.getString("id", null) == null) {
             Toast.makeText(AddBarcodeActivity.this,
                     "You are missing store name!", Toast.LENGTH_SHORT).show();
         }else if(barcodeNumber.isEmpty()){
             Toast.makeText(this,
                     "Barcode number is missing!", Toast.LENGTH_SHORT).show();
         }else{
-            myDB.addStoreBarcode(database_id, barcodeNumber);
+            myDB.addStoreBarcode(pref.getString("id", null), barcodeNumber);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.diplomski;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,8 +10,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     TextView noData_textView;
     ImageView noData_imageView;
-    View fabCircle_View;
 
     StoresDB myDB;
     ArrayList<String> store_id, store_name, store_barcode;
@@ -42,10 +40,27 @@ public class MainActivity extends AppCompatActivity {
 
     CustomAdapter customAdapter;
 
+    SharedPreferences prefAddNewStore;
+    SharedPreferences.Editor editorAddNewStore;
+
+    SharedPreferences prefRecyclerView;
+    SharedPreferences.Editor editorRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Shared preferences only for resetting Add New ID
+        prefAddNewStore = getApplicationContext().
+                getSharedPreferences("store_id", MODE_PRIVATE);
+        editorAddNewStore = prefAddNewStore.edit();
+        editorAddNewStore.clear();
+        editorAddNewStore.commit();
+
+        prefAddNewStore = getApplicationContext().
+                getSharedPreferences("recycler_id", MODE_PRIVATE);
+        editorAddNewStore = prefAddNewStore.edit();
 
         findViews();
 
@@ -62,12 +77,15 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
-        add_fab.setOnClickListener(v -> {
-            animateFABAndStartActivity();
-        });
+        add_fab.setOnClickListener(v -> startAddNameActivity());
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    @Override
+    public void onBackPressed() {
+        ExitDialog();
     }
 
     @Override
@@ -100,6 +118,17 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    private void ExitDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Exit");
+        builder.setMessage("Are you sure you want to exit ?");
+        builder.setPositiveButton("Yes", (dialog, which) -> System.exit(0));
+        builder.setNegativeButton("No", (dialog, which) -> {
+            //do nothing
+        });
+        builder.create().show();
+    }
+
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START
                     | ItemTouchHelper.END, 0) {
@@ -111,16 +140,14 @@ public class MainActivity extends AppCompatActivity {
             int toPosition = target.getAdapterPosition();
 
             Collections.swap(store_id, fromPosition, toPosition);
-
             Objects.requireNonNull(recyclerView.getAdapter()).
                     notifyItemMoved(fromPosition, toPosition);
-
             return false;
         }
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
+            //TODO
         }
     };
 
@@ -129,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
         add_fab = findViewById(R.id.add_button);
         noData_textView = findViewById(R.id.no_data);
         noData_imageView = findViewById(R.id.no_data_imageView);
-        fabCircle_View = findViewById(R.id.fabCircle_Main_View);
     }
 
     private void storeDataInArrays(){
@@ -150,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
                             store_logo_blob.length));
                 }
             }
-
             noData_imageView.setVisibility(View.GONE);
             noData_textView.setVisibility(View.GONE);
         }
@@ -159,18 +184,5 @@ public class MainActivity extends AppCompatActivity {
     private void startAddNameActivity(){
         Intent intent = new Intent(MainActivity.this, AddNameActivity.class);
         startActivity(intent);
-    }
-
-    private void animateFABAndStartActivity(){
-        Animation animation = AnimationUtils.loadAnimation(MainActivity.this,
-                R.anim.main_layout_fab_circle_animation);
-        animation.setFillAfter(true);
-        fabCircle_View.startAnimation(animation);
-        fabCircle_View.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startAddNameActivity();
-            }
-        }, 300);
     }
 }

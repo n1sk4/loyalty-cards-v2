@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,17 +20,27 @@ public class AddNameActivity extends AppCompatActivity {
     Button cancel_button;
     EditText storeName_editText;
 
-    String database_id;
+    StoresDB myDB;
+
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_name);
 
+        myDB = new StoresDB(AddNameActivity.this);
+        pref = getApplicationContext().
+                getSharedPreferences("store_id", MODE_PRIVATE);
+        editor = pref.edit();
+
         findViews();
+
         getIntentData();
 
         changeNextButtonVisibility();
+
         storeName_editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -42,10 +53,16 @@ public class AddNameActivity extends AppCompatActivity {
             if(storeName_editText.getText().toString().trim().length() <= 0){
                 confirmNoStoreNameDialog();
             }else{
-                if(database_id == null){
+                if(pref.getString("id", null) == null){
                     storeNameToDatabase();
                 }
-                startAddBarcodeActivity();
+                if(pref.getString("id", null) != null){
+                    startAddBarcodeActivity();
+                }
+                else{
+                    Toast.makeText(this, "Something went wrong with Name creation",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -64,34 +81,42 @@ public class AddNameActivity extends AppCompatActivity {
     }
 
     private void confirmExitDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Exit");
-        builder.setMessage("Are you sure you want to cancel new loyalty card input?");
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            if(storeName_editText.getText().length() < 0) discardOrSaveDataDialog();
-            else startMainActivity();});
-        builder.setNegativeButton("No", (dialog, which) -> {/*do nothing*/});
-        builder.create().show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Exit");
+            builder.setMessage("Are you sure you want to cancel new loyalty card input?");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                if (storeName_editText.getText().length() > 0) {
+                    discardOrSaveDataDialog();
+                }
+                else {
+                    startMainActivity();
+                }
+            });
+            builder.setNegativeButton("No", (dialog, which) -> {/*do nothing*/});
+            builder.create().show();
     }
 
     private void discardOrSaveDataDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Save or discard");
         builder.setMessage("Do you want to save or discard input data?");
-        builder.setPositiveButton("Save", (dialog, which) -> startMainActivity());
+        builder.setPositiveButton("Save", (dialog, which) ->{
+            if(myDB.getStoreName(pref.getString("id", null)) == null){
+                myDB.addStoreName(storeName_editText.getText().toString().trim());
+            }
+            startMainActivity();
+        });
         builder.setNegativeButton("Discard", (dialog, which) -> {
-            StoresDB myDB = new StoresDB(AddNameActivity.this);
-            myDB.deleteOneRow(database_id);
-            Intent intent = new Intent(AddNameActivity.this, MainActivity.class);
-            startActivity(intent);
+            myDB.deleteOneRow(pref.getString("id", null));
+            startMainActivity();
         });
         builder.create().show();
     }
 
     private void startAddBarcodeActivity(){
         Intent intent = new Intent(AddNameActivity.this, AddBarcodeActivity.class);
-        if(database_id != null){
-            intent.putExtra("id", database_id);
+        if(pref.getString("id", null) != null){
+            intent.putExtra("id", pref.getString("id", null));
         }
         startActivity(intent);
     }
@@ -108,22 +133,21 @@ public class AddNameActivity extends AppCompatActivity {
     }
 
     private void storeNameToDatabase(){
-        StoresDB myDB = new StoresDB(AddNameActivity.this);
         if(storeName_editText.getText().toString().length() <= 0){
             storeName_editText.setError("Store name field cannot be empty!");
             Toast.makeText(AddNameActivity.this,
                     "Store name field cannot be empty!", Toast.LENGTH_SHORT).show();
         }else{
-            database_id = Long.toString(
-                    myDB.addStoreName(storeName_editText.getText().toString().trim()));
+            editor.putString("id",
+                    Long.toString(myDB.addStoreName(
+                            storeName_editText.getText().toString().trim())));
+            editor.commit();
         }
     }
 
     private void getIntentData(){
-        if(getIntent().hasExtra("id")){
-            database_id = getIntent().getStringExtra("id");
-            StoresDB myDB = new StoresDB(AddNameActivity.this);
-            storeName_editText.setText(myDB.getStoreName(database_id));
+        if(pref.getString("id", null) != null){
+            storeName_editText.setText(myDB.getStoreName(pref.getString("id", null)));
         }
     }
 
@@ -137,7 +161,6 @@ public class AddNameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startMainActivity();
-        super.onBackPressed();
+        confirmExitDialog();
     }
 }

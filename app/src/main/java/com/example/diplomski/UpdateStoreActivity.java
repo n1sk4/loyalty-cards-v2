@@ -101,7 +101,6 @@ public class UpdateStoreActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         startShowBarcodeActivity();
-        super.onBackPressed();
     }
 
     void getIntentData(){

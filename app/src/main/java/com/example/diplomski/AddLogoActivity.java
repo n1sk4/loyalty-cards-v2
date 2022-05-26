@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,13 +28,22 @@ public class AddLogoActivity extends AppCompatActivity {
     Button next_button;
     ImageView logoPreview_imageView;
 
-    String database_id;
     Bitmap logoBitmap;
+
+    StoresDB myDB;
+
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_logo);
+
+        myDB = new StoresDB(AddLogoActivity.this);
+        pref = getApplicationContext().
+                getSharedPreferences("store_id", MODE_PRIVATE);
+        editor = pref.edit();
 
         findViews();
 
@@ -66,6 +76,7 @@ public class AddLogoActivity extends AppCompatActivity {
                 if(logoBitmap == null){
                     confirmNoDataDialog();
                 }else{
+                    if(myDB.getStoreLogo(pref.getString("id", null)) == null)
                     storeLogoToDatabase();
                     startMainActivity();
                 }
@@ -76,10 +87,12 @@ public class AddLogoActivity extends AppCompatActivity {
     private void confirmNoDataDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Data missing!");
-        builder.setMessage("Do you want to exit?");
-        builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+        builder.setMessage("Do you want to finish?");
+        builder.setPositiveButton("Finish", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                editor.clear();
+                editor.commit();
                 startMainActivity();
             }
         });
@@ -97,11 +110,6 @@ public class AddLogoActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void startBarcodeActivity(){
-        Intent intent = new Intent(AddLogoActivity.this, ShowBarcodeActivity.class);
-        startActivity(intent);
-    }
-
     private void startAddBarcodeActivity(){
         Intent intent = new Intent(AddLogoActivity.this, AddBarcodeActivity.class);
         startActivity(intent);
@@ -115,26 +123,30 @@ public class AddLogoActivity extends AppCompatActivity {
     }
 
     private void getIntentData(){
-        if(getIntent().hasExtra("id")){
-            database_id = getIntent().getStringExtra("id");
+        if(pref.getString("id", null) != null) {
+            if (myDB.getStoreLogo(pref.getString("id", null)) != null) {
+                logoPreview_imageView.setImageBitmap(myDB.getStoreLogo(pref.getString("id", null)));
+            }
         }
     }
 
     private void storeLogoToDatabase(){
-        StoresDB myDB = new StoresDB(AddLogoActivity.this);
-        if(database_id == null) {
+        if(pref.getString("id", null) == null) {
             Toast.makeText(AddLogoActivity.this,
                     "You are missing store name!", Toast.LENGTH_SHORT).show();
         }else if(logoBitmap == null){
-            Toast.makeText(this, "Logo is missing!", Toast.LENGTH_SHORT).show();
+            //do nothing TODO check if the image is empty
         }else{
-            myDB.addStoreLogo(database_id, logoBitmap);
+            myDB.addStoreLogo(pref.getString("id", null), logoBitmap);
         }
     }
 
     private void selectAndPlaceLogo(){
         CropImage.activity().setGuidelines(CropImageView.Guidelines.ON)
                 .start(AddLogoActivity.this);
+        if(myDB.getStoreLogo(pref.getString("id", null)) == null){
+            storeLogoToDatabase();
+        }
     }
 
     @Override
@@ -149,10 +161,16 @@ public class AddLogoActivity extends AppCompatActivity {
                     logoBitmap = MediaStore.Images.Media.getBitmap(
                             this.getContentResolver(), resultUri);
                     logoPreview_imageView.setImageBitmap(logoBitmap);
+                    storeLogoToDatabase();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        startAddBarcodeActivity();
     }
 }

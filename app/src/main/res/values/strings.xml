@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">diplomski</string>
+    <string name="app_name">Loyalty cards</string>
     <string name="enter_store_name">Enter store name</string>
     <string name="add_new_store">Add</string>
     <string name="enter_store_phone">Enter store phone</string>

@@ -59,18 +59,20 @@ public class StoresDB extends SQLiteOpenHelper {
 
     @SuppressLint("Range")
     String getStoreName(String row_id){
-        if(Integer.parseInt(row_id) > 0) {
-            String query = "SELECT " + row_id + ", " + COLUMN_STORE + " FROM " + TABLE_NAME
-                    + " WHERE " + COLUMN_ID + "=?";
-            SQLiteDatabase db = this.getReadableDatabase();
+        if(row_id != null) {
+            if (Integer.parseInt(row_id) > 0) {
+                String query = "SELECT " + row_id + ", " + COLUMN_STORE + " FROM " + TABLE_NAME
+                        + " WHERE " + COLUMN_ID + "=?";
+                SQLiteDatabase db = this.getReadableDatabase();
 
-            Cursor cursor = db.rawQuery(query, new String[] {row_id + ""});
-            cursor.moveToFirst();
-            if (cursor.getCount() > 0 && !cursor.isNull(1)) {
-                return cursor.getString(1);
+                Cursor cursor = db.rawQuery(query, new String[]{row_id + ""});
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0 && !cursor.isNull(1)) {
+                    return cursor.getString(1);
+                }
             }
         }
-        return "";
+        return null;
     }
 
     long addStoreBarcode(String row_id, String storeBarcode){
@@ -81,18 +83,20 @@ public class StoresDB extends SQLiteOpenHelper {
     }
 
     String getStoreBarcode(String row_id){
-        if(Integer.parseInt(row_id) > 0) {
-            String query = "SELECT " + row_id + ", " + COLUMN_BARCODE + " FROM " + TABLE_NAME
-                    + " WHERE " + COLUMN_ID + "=?";
-            SQLiteDatabase db = this.getReadableDatabase();
+        if(row_id != null) {
+            if (Integer.parseInt(row_id) > 0) {
+                String query = "SELECT " + row_id + ", " + COLUMN_BARCODE + " FROM " + TABLE_NAME
+                        + " WHERE " + COLUMN_ID + "=?";
+                SQLiteDatabase db = this.getReadableDatabase();
 
-            Cursor cursor = db.rawQuery(query, new String[] {row_id + ""});
-            cursor.moveToFirst();
-            if (cursor.getCount() > 0 && !cursor.isNull(1)) {
-                return cursor.getString(1);
+                Cursor cursor = db.rawQuery(query, new String[]{row_id + ""});
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0 && !cursor.isNull(1)) {
+                    return cursor.getString(1);
+                }
             }
         }
-        return "";
+        return null;
     }
 
     long addStoreLogo(String row_id, Bitmap storeLogo){
@@ -104,16 +108,18 @@ public class StoresDB extends SQLiteOpenHelper {
     }
 
     Bitmap getStoreLogo(String row_id){
-        if(Integer.parseInt(row_id) > 0) {
-            String query = "SELECT " + row_id + ", " + COLUMN_LOGO + " FROM " + TABLE_NAME
-                    + " WHERE " + COLUMN_ID + "=?";
-            SQLiteDatabase db = this.getReadableDatabase();
+        if(row_id != null) {
+            if (Integer.parseInt(row_id) > 0) {
+                String query = "SELECT " + row_id + ", " + COLUMN_LOGO + " FROM " + TABLE_NAME
+                        + " WHERE " + COLUMN_ID + "=?";
+                SQLiteDatabase db = this.getReadableDatabase();
 
-            Cursor cursor = db.rawQuery(query, new String[] {row_id + ""});
-            cursor.moveToFirst();
-            if (cursor.getCount() > 0 && !cursor.isNull(1)) {
-                return BitmapFactory.decodeByteArray((cursor.getBlob(1)),
-                        0, (cursor.getBlob(1).length));
+                Cursor cursor = db.rawQuery(query, new String[]{row_id + ""});
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0 && !cursor.isNull(1)) {
+                    return BitmapFactory.decodeByteArray((cursor.getBlob(1)),
+                            0, (cursor.getBlob(1).length));
+                }
             }
         }
         return null;

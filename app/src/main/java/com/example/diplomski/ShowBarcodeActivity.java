@@ -66,7 +66,7 @@ public class ShowBarcodeActivity extends AppCompatActivity {
         barcode_imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (barcode.equals("")) startUpdateActivity();
+                if (barcode == null) startUpdateActivity();
             }
         });
 
@@ -109,7 +109,7 @@ public class ShowBarcodeActivity extends AppCompatActivity {
     @SuppressLint("ResourceAsColor")
     private void generateBarcodeImage() {
         MultiFormatWriter writer = new MultiFormatWriter();
-        if (!barcode.equals("")) {
+        if (barcode != null) {
             try {
                 int width, height;
                 width = 800;
@@ -190,10 +190,15 @@ public class ShowBarcodeActivity extends AppCompatActivity {
     }
 
     private void animateBarcode() {
-        if (!barcode.equals("")) {
+        if (barcode != null) {
             Animation animation = AnimationUtils.loadAnimation(ShowBarcodeActivity.this, R.anim.show_barcode_animation);
             animation.setFillAfter(true);
             barcode_imageView.startAnimation(animation);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        startMainActivity();
     }
 }
