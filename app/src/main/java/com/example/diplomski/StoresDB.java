@@ -3,13 +3,11 @@ package com.example.diplomski;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +16,6 @@ import java.io.ByteArrayOutputStream;
 
 public class StoresDB extends SQLiteOpenHelper {
 
-    private Context context;
     private static final String DATABASE_NAME = "Stores.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -31,7 +28,6 @@ public class StoresDB extends SQLiteOpenHelper {
 
     StoresDB(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
     }
 
     @Override
@@ -70,6 +66,7 @@ public class StoresDB extends SQLiteOpenHelper {
                 if (cursor.getCount() > 0 && !cursor.isNull(1)) {
                     return cursor.getString(1);
                 }
+                cursor.close();
             }
         }
         return null;
@@ -94,6 +91,7 @@ public class StoresDB extends SQLiteOpenHelper {
                 if (cursor.getCount() > 0 && !cursor.isNull(1)) {
                     return cursor.getString(1);
                 }
+                cursor.close();
             }
         }
         return null;
@@ -120,6 +118,7 @@ public class StoresDB extends SQLiteOpenHelper {
                     return BitmapFactory.decodeByteArray((cursor.getBlob(1)),
                             0, (cursor.getBlob(1).length));
                 }
+                cursor.close();
             }
         }
         return null;

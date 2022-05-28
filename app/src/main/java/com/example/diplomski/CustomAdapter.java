@@ -50,9 +50,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.storeName_textView.setText(String.valueOf(storeName.get(position)));
         if(storeLogo.get(position) != null){
-            holder.storeLogo_ImageView.setImageBitmap((Bitmap) storeLogo.get(position));
+            holder.storeLogo_ImageView.setImageBitmap(storeLogo.get(position));
             holder.storeLogo_ImageView.setImageTintList(null);
-            Palette.from((Bitmap) storeLogo.get(position)).generate(palette -> {
+            Palette.from(storeLogo.get(position)).generate(palette -> {
                 assert palette != null;
                 holder.individualLayout.setBackgroundColor(palette.getDominantColor(ContextCompat.
                         getColor(context, R.color.white)));
@@ -68,12 +68,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             }
         });
         */
-        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startBarcodeActivity(position);
-            }
-        });
+        holder.mainLayout.setOnClickListener(v -> startBarcodeActivity(position));
     }
 
     @Override
@@ -101,6 +96,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         intent.putExtra("id", String.valueOf(storeID.get(position)));
         intent.putExtra("name", String.valueOf(storeName.get(position)));
         intent.putExtra("barcode", String.valueOf(storeBarcode.get(position)));
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }
 }

@@ -1,13 +1,11 @@
 package com.example.diplomski;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -16,8 +14,6 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,8 +22,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
@@ -45,7 +39,6 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 public class AddBarcodeActivity extends AppCompatActivity {
     Button captureImage_button;
@@ -82,55 +75,31 @@ public class AddBarcodeActivity extends AppCompatActivity {
 
         getIntentData();
 
-        generate_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                generateBarcodeImage();
-                storeBarcodeToDatabase();
-                Toast.makeText(AddBarcodeActivity.this, "GENERATE SAVED TO DB", Toast.LENGTH_SHORT).show();
-            }
+        generate_button.setOnClickListener(v -> {
+            generateBarcodeImage();
+            storeBarcodeToDatabase();
+            Toast.makeText(AddBarcodeActivity.this, "GENERATE SAVED TO DB", Toast.LENGTH_SHORT).show();
         });
 
-        next_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(barcodeNumber_editText.getText().length() <= 0){
-                    confirmNoBarcodeDialog();
+        next_button.setOnClickListener(v -> {
+            if(barcodeNumber_editText.getText().length() <= 0){
+                confirmNoBarcodeDialog();
+            }
+            else{
+                if(myDB.getStoreBarcode(pref.getString("id", null)) == null){
+                    storeBarcodeToDatabase();
                 }
-                else{
-                    if(myDB.getStoreBarcode(pref.getString("id", null)) == null){
-                        storeBarcodeToDatabase();
-                    }
-                    startAddLogoActivity();
-                }
+                startAddLogoActivity();
             }
         });
 
-        back_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startAddNameActivity();
-            }
-        });
+        back_button.setOnClickListener(v -> startAddNameActivity());
 
-        barcodeQR_switch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switchBarcodeStates();
-            }
-        });
+        barcodeQR_switch.setOnClickListener(v -> switchBarcodeStates());
 
-        barcode_imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {selectAndPlaceBarcode();}
-        });
+        barcode_imageView.setOnClickListener(v -> selectAndPlaceBarcode());
 
-        captureImage_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectAndPlaceBarcode();
-            }
-        });
+        captureImage_button.setOnClickListener(v -> selectAndPlaceBarcode());
     }
 
     @Override
@@ -234,30 +203,20 @@ public class AddBarcodeActivity extends AppCompatActivity {
         BarcodeScanner scanner = BarcodeScanning.getClient();
 
         Task<List<Barcode>> result = scanner.process(image)
-                .addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
-            @Override
-            public void onSuccess(List<Barcode> barcodes) {
-                for(Barcode barcode : barcodes){
-                    Rect bounds = barcode.getBoundingBox();
-                    Point[] corners = barcode.getCornerPoints();
+                .addOnSuccessListener(barcodes -> {
+                    for(Barcode barcode : barcodes){
+                        Rect bounds = barcode.getBoundingBox();
+                        Point[] corners = barcode.getCornerPoints();
 
-                    String rawValue = barcode.getRawValue();
+                        String rawValue = barcode.getRawValue();
 
-                    int valueType = barcode.getValueType();
-
-                    String returnValue = barcode.getDisplayValue();
-                    Toast.makeText(AddBarcodeActivity.this, rawValue,
-                            Toast.LENGTH_SHORT).show();
-                    barcodeNumber_editText.setText(returnValue);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AddBarcodeActivity.this,
-                        "Barcode not recognized!", Toast.LENGTH_SHORT).show();
-            }
-        });
+                        String returnValue = barcode.getDisplayValue();
+                        Toast.makeText(AddBarcodeActivity.this, rawValue,
+                                Toast.LENGTH_SHORT).show();
+                        barcodeNumber_editText.setText(returnValue);
+                    }
+                }).addOnFailureListener(e -> Toast.makeText(AddBarcodeActivity.this,
+                        "Barcode not recognized!", Toast.LENGTH_SHORT).show());
     }
 
     private void confirmNoBarcodeDialog(){
@@ -265,28 +224,22 @@ public class AddBarcodeActivity extends AppCompatActivity {
         builder.setTitle("Barcode missing!");
         builder.setMessage("Are you sure you want to continue without "
                 + "StoreName" + " store barcode?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startAddLogoActivity();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setPositiveButton("Yes", (dialog, which) -> startAddLogoActivity());
+        builder.setNegativeButton("No", (dialog, which) -> {
 
-            }
         });
         builder.create().show();
     }
 
     private void startAddLogoActivity(){
         Intent intent = new Intent(AddBarcodeActivity.this, AddLogoActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
     private void startAddNameActivity(){
         Intent intent = new Intent(AddBarcodeActivity.this, AddNameActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 

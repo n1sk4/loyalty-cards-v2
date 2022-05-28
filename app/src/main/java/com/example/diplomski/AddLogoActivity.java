@@ -4,14 +4,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -49,37 +47,19 @@ public class AddLogoActivity extends AppCompatActivity {
 
         getIntentData();
 
-        back_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startAddBarcodeActivity();
-            }
-        });
+        back_button.setOnClickListener(v -> startAddBarcodeActivity());
 
-        logoPreview_imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectAndPlaceLogo();
-            }
-        });
+        logoPreview_imageView.setOnClickListener(v -> selectAndPlaceLogo());
 
-        captureImage_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectAndPlaceLogo();
-            }
-        });
+        captureImage_button.setOnClickListener(v -> selectAndPlaceLogo());
 
-        next_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(logoBitmap == null){
-                    confirmNoDataDialog();
-                }else{
-                    if(myDB.getStoreLogo(pref.getString("id", null)) == null)
-                    storeLogoToDatabase();
-                    startMainActivity();
-                }
+        next_button.setOnClickListener(v -> {
+            if(logoBitmap == null){
+                confirmNoDataDialog();
+            }else{
+                if(myDB.getStoreLogo(pref.getString("id", null)) == null)
+                storeLogoToDatabase();
+                startMainActivity();
             }
         });
     }
@@ -88,30 +68,26 @@ public class AddLogoActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Data missing!");
         builder.setMessage("Do you want to finish?");
-        builder.setPositiveButton("Finish", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                editor.clear();
-                editor.commit();
-                startMainActivity();
-            }
+        builder.setPositiveButton("Finish", (dialog, which) -> {
+            editor.clear();
+            editor.commit();
+            startMainActivity();
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setNegativeButton("No", (dialog, which) -> {
 
-            }
         });
         builder.create().show();
     }
 
     private void startMainActivity(){
         Intent intent = new Intent(AddLogoActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
     private void startAddBarcodeActivity(){
         Intent intent = new Intent(AddLogoActivity.this, AddBarcodeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 

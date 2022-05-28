@@ -6,10 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -41,12 +37,9 @@ public class AddNameActivity extends AppCompatActivity {
 
         changeNextButtonVisibility();
 
-        storeName_editText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                changeNextButtonVisibility();
-                return false;
-            }
+        storeName_editText.setOnKeyListener((v, keyCode, event) -> {
+            changeNextButtonVisibility();
+            return false;
         });
 
         next_button.setOnClickListener(v -> {
@@ -118,11 +111,13 @@ public class AddNameActivity extends AppCompatActivity {
         if(pref.getString("id", null) != null){
             intent.putExtra("id", pref.getString("id", null));
         }
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
     private void startMainActivity(){
         Intent intent = new Intent(AddNameActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 

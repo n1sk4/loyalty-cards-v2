@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -60,27 +59,20 @@ public class AddActivity extends AppCompatActivity {
             }, REQUEST_CAMERA_CODE);
         }
 
-        add_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StoresDB myDB = new StoresDB(AddActivity.this);
-                if(storeName_editText.getText().toString().length() <= 0){
-                    storeName_editText.setError("Store name field cannot be empty!");
-                    Toast.makeText(AddActivity.this,
-                            "Store name field cannot be empty!", Toast.LENGTH_SHORT).show();
+        add_button.setOnClickListener(v -> {
+            if(storeName_editText.getText().toString().length() <= 0){
+                storeName_editText.setError("Store name field cannot be empty!");
+                Toast.makeText(AddActivity.this,
+                        "Store name field cannot be empty!", Toast.LENGTH_SHORT).show();
+            }else{
+                storeName_editText.setError(null);
+                if(barcode != null){
+                    Intent intent = new Intent(AddActivity.this,
+                            MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }else{
-                    long db_result_name = myDB.addStoreName(
-                            storeName_editText.getText().toString().trim());
-                    storeName_editText.setError(null);
-                    if(barcode != null){
-                        long db_result_barcode = myDB.addStoreBarcode(barcode.trim(),
-                                String.valueOf(db_result_name));
-                        Intent intent = new Intent(AddActivity.this,
-                                MainActivity.class);
-                        startActivity(intent);
-                    }else{
-                        openDialogBarcodeMissing();
-                    }
+                    openDialogBarcodeMissing();
                 }
             }
         });
@@ -127,6 +119,7 @@ public class AddActivity extends AppCompatActivity {
 
     private void openAddBarcodeActivity(){
         Intent intent = new Intent(AddActivity.this, AddBarcodeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
@@ -137,6 +130,7 @@ public class AddActivity extends AppCompatActivity {
                 storeName_editText.getText().toString().trim() + " store barcode?");
         builder.setPositiveButton("Yes", (dialog, which) -> {
             Intent intent = new Intent(AddActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
         builder.setNegativeButton("No", (dialog, which) -> {

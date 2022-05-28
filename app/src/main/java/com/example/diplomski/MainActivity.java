@@ -125,14 +125,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void ExitDialog(){
+        /*
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Exit");
         builder.setMessage("Are you sure you want to exit ?");
-        builder.setPositiveButton("Yes", (dialog, which) -> System.exit(0));
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            finish();
+            System.exit(0);
+        });
         builder.setNegativeButton("No", (dialog, which) -> {
             //do nothing
         });
         builder.create().show();
+        */
     }
 
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(
@@ -189,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void startAddNameActivity(){
         Intent intent = new Intent(MainActivity.this, AddNameActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }

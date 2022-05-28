@@ -2,22 +2,17 @@ package com.example.diplomski;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -232,9 +227,8 @@ public class ShowBarcodeActivity extends AppCompatActivity {
     private void setBrightness(){
         if(ContextCompat.checkSelfPermission(ShowBarcodeActivity.this, Manifest.permission.WRITE_SETTINGS)
                 != PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(this, "PERMISSION MISSING!!!!", Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(ShowBarcodeActivity.this, new String[]{
-                    Manifest.permission.CAMERA
+                    Manifest.permission.WRITE_SETTINGS
             }, REQUEST_WRITE_SETTINGS);
         }
 

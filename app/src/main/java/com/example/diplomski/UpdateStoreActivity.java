@@ -1,22 +1,17 @@
 package com.example.diplomski;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -70,39 +65,23 @@ public class UpdateStoreActivity extends AppCompatActivity {
             ab.setTitle(name + " - edit store data");
         }
 
-        update_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                name = name_editText.getText().toString().trim();
-                barcode = barcode_editText.getText().toString().trim();
-                myDB.updateData(id, name, barcode, logo);
-                ActionBar ab = getSupportActionBar();
-                if(name != null){
-                    assert ab != null;
-                    ab.setTitle(name);
-                }
-                startShowBarcodeActivity();
+        update_button.setOnClickListener(v -> {
+            name = name_editText.getText().toString().trim();
+            barcode = barcode_editText.getText().toString().trim();
+            myDB.updateData(id, name, barcode, logo);
+            ActionBar ab1 = getSupportActionBar();
+            if(name != null){
+                assert ab1 != null;
+                ab1.setTitle(name);
             }
+            startShowBarcodeActivity();
         });
 
-        delete_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmDialog();
-            }
-        });
+        delete_button.setOnClickListener(v -> confirmDialog());
 
-        back_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { startShowBarcodeActivity(); }
-        });
+        back_button.setOnClickListener(v -> startShowBarcodeActivity());
 
-        logo_imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectAndPlaceLogo();
-            }
-        });
+        logo_imageView.setOnClickListener(v -> selectAndPlaceLogo());
     }
 
     @Override
@@ -137,19 +116,13 @@ public class UpdateStoreActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete " + name + "?");
         builder.setMessage("Are you sure you want to delete " + name + "?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                myDB.deleteOneRow(id);
-                myDB.updateData(id, name, barcode, logo);
-                startMainActivity();
-            }
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            myDB.deleteOneRow(id);
+            myDB.updateData(id, name, barcode, logo);
+            startMainActivity();
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //TODO Do something
-            }
+        builder.setNegativeButton("No", (dialog, which) -> {
+            //TODO Do something
         });
         builder.create().show();
     }
@@ -165,6 +138,7 @@ public class UpdateStoreActivity extends AppCompatActivity {
         if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if(resultCode == RESULT_OK){
+                assert result != null;
                 Uri resultUri = result.getUri();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(
@@ -192,12 +166,14 @@ public class UpdateStoreActivity extends AppCompatActivity {
     private void startMainActivity(){
         Intent intent = new Intent(UpdateStoreActivity.this,
                 com.example.diplomski.MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
     private void startShowBarcodeActivity(){
         Intent intent = new Intent(UpdateStoreActivity.this, ShowBarcodeActivity.class);
         intent.putExtra("id", id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
