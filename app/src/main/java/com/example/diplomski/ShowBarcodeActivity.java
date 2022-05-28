@@ -1,15 +1,23 @@
 package com.example.diplomski;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -20,6 +28,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.palette.graphics.Palette;
 
@@ -45,6 +54,8 @@ public class ShowBarcodeActivity extends AppCompatActivity {
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+
+    private static final int REQUEST_WRITE_SETTINGS = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +84,8 @@ public class ShowBarcodeActivity extends AppCompatActivity {
 
         animateBarcode();
 
+        setBrightness();
+
         barcode_imageView.setOnClickListener(v -> {
             if (barcode == null || barcode_text.getText().equals("BARCODE MISSING")) startUpdateActivity();
         });
@@ -94,8 +107,8 @@ public class ShowBarcodeActivity extends AppCompatActivity {
                 editor.putString("id", id);
                 editor.commit();
 
-                name = myDB.getStoreName(pref.getString("id", "No name"));
-                barcode = myDB.getStoreBarcode(pref.getString("id", "000000000000"));
+                name = myDB.getStoreName(pref.getString("id", null));
+                barcode = myDB.getStoreBarcode(pref.getString("id", null));
                 logo = myDB.getStoreLogo(pref.getString("id", null));
             } else {
                 Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
@@ -124,7 +137,8 @@ public class ShowBarcodeActivity extends AppCompatActivity {
                     BarcodeEncoder encoder = new BarcodeEncoder();
                     Bitmap bitmap = encoder.createBitmap(matrix);
                     barcode_imageView.setImageBitmap(bitmap);
-                    barcode_imageView.setColorFilter(Color.argb(255, 255, 255, 255));
+                    barcode_imageView.setColorFilter(null);
+                    barcode_imageView.clearColorFilter();
 
                     barcode_text.setText(barcode);
                     barcode_text.setTextColor(R.color.black);
@@ -213,5 +227,21 @@ public class ShowBarcodeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         startMainActivity();
+    }
+
+    private void setBrightness(){
+        if(ContextCompat.checkSelfPermission(ShowBarcodeActivity.this, Manifest.permission.WRITE_SETTINGS)
+                != PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this, "PERMISSION MISSING!!!!", Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(ShowBarcodeActivity.this, new String[]{
+                    Manifest.permission.CAMERA
+            }, REQUEST_WRITE_SETTINGS);
+        }
+
+        if(ContextCompat.checkSelfPermission(ShowBarcodeActivity.this, Manifest.permission.WRITE_SETTINGS)
+                == PackageManager.PERMISSION_GRANTED){
+            Context context = getApplicationContext();
+            Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, 100);
+        }
     }
 }
