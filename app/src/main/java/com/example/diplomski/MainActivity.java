@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
     CustomAdapter customAdapter;
 
     SharedPreferences prefAddNewStore;
-    SharedPreferences.Editor editorAddNewStore;
+    SharedPreferences.Editor prefEditor;
+    SharedPreferences prefShowBarcode;
 
     SharedPreferences prefRecyclerView;
     SharedPreferences.Editor editorRecyclerView;
@@ -54,13 +55,18 @@ public class MainActivity extends AppCompatActivity {
         //Shared preferences only for resetting Add New ID
         prefAddNewStore = getApplicationContext().
                 getSharedPreferences("store_id", MODE_PRIVATE);
-        editorAddNewStore = prefAddNewStore.edit();
-        editorAddNewStore.clear();
-        editorAddNewStore.commit();
+        prefEditor = prefAddNewStore.edit();
+        prefEditor.clear();
+        prefEditor.commit();
+        prefShowBarcode = getApplicationContext().
+                getSharedPreferences("store_id_barcode", MODE_PRIVATE);
+        prefEditor = prefShowBarcode.edit();
+        prefEditor.clear();
+        prefEditor.commit();
 
         prefAddNewStore = getApplicationContext().
                 getSharedPreferences("recycler_id", MODE_PRIVATE);
-        editorAddNewStore = prefAddNewStore.edit();
+        prefEditor = prefAddNewStore.edit();
 
         findViews();
 

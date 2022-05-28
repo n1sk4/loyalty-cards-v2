@@ -314,9 +314,12 @@ public class AddBarcodeActivity extends AppCompatActivity {
         if(pref.getString("id", null) == null) {
             Toast.makeText(AddBarcodeActivity.this,
                     "You are missing store name!", Toast.LENGTH_SHORT).show();
-        }else if(barcodeNumber.isEmpty()){
+        }else if(barcodeNumber.isEmpty()) {
             Toast.makeText(this,
                     "Barcode number is missing!", Toast.LENGTH_SHORT).show();
+            barcodeNumber_editText.setError("Barcode number is missing");
+        }else if(barcodeNumber.equals("")){
+            myDB.addStoreBarcode(pref.getString("id", null), null);
         }else{
             myDB.addStoreBarcode(pref.getString("id", null), barcodeNumber);
         }

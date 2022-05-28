@@ -2,6 +2,7 @@ package com.example.diplomski;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,12 +45,18 @@ public class UpdateStoreActivity extends AppCompatActivity {
 
     StoresDB myDB;
 
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_store);
 
         myDB = new StoresDB(UpdateStoreActivity.this);
+        pref = getApplicationContext().
+                getSharedPreferences("store_id_barcode", MODE_PRIVATE);
+        editor = pref.edit();
 
         findViews();
 
@@ -103,9 +110,11 @@ public class UpdateStoreActivity extends AppCompatActivity {
         startShowBarcodeActivity();
     }
 
+
+
     void getIntentData(){
-        if(getIntent().hasExtra("id")){
-            id = getIntent().getStringExtra("id");
+        if(pref.getString("id", null) != null){
+            id = pref.getString("id", null);
 
             name = myDB.getStoreName(id);
             barcode = myDB.getStoreBarcode(id);
@@ -113,7 +122,11 @@ public class UpdateStoreActivity extends AppCompatActivity {
 
             name_editText.setText(name);
             barcode_editText.setText(barcode);
-            logo_imageView.setImageBitmap(logo);
+            if(logo == null){
+                logo_imageView.setImageResource(R.drawable.ic_shopping_bag);
+            }else{
+                logo_imageView.setImageBitmap(logo);
+            }
         }else{
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
             startMainActivity();

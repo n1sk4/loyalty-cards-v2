@@ -2,6 +2,7 @@ package com.example.diplomski;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
@@ -27,6 +28,8 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.util.Objects;
+
 public class ShowBarcodeActivity extends AppCompatActivity {
 
     ImageView barcode_imageView;
@@ -41,10 +44,18 @@ public class ShowBarcodeActivity extends AppCompatActivity {
 
     StoresDB myDB;
 
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_barcode);
+
+        myDB = new StoresDB(ShowBarcodeActivity.this);
+        pref = getApplicationContext().
+                getSharedPreferences("store_id_barcode", MODE_PRIVATE);
+        editor = pref.edit();
 
         findViews();
 
@@ -66,7 +77,7 @@ public class ShowBarcodeActivity extends AppCompatActivity {
         barcode_imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (barcode == null) startUpdateActivity();
+                if (barcode == null || barcode_text.equals("BARCODE MISSING")) startUpdateActivity();
             }
         });
 
@@ -93,16 +104,24 @@ public class ShowBarcodeActivity extends AppCompatActivity {
     }
 
     private void getIntentData() {
-        if (getIntent().hasExtra("id")) {
-            id = getIntent().getStringExtra("id");
-            myDB = new StoresDB(ShowBarcodeActivity.this);
+        if (pref.getString("id", null) == null) {
+            if (getIntent().hasExtra("id")) {
+                id = getIntent().getStringExtra("id");
 
-            name = myDB.getStoreName(id);
-            barcode = myDB.getStoreBarcode(id);
-            logo = myDB.getStoreLogo(id);
-        } else {
-            Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
-            startMainActivity();
+                editor.putString("id", id);
+                editor.commit();
+
+                name = myDB.getStoreName(pref.getString("id", "No name"));
+                barcode = myDB.getStoreBarcode(pref.getString("id", "000000000000"));
+                logo = myDB.getStoreLogo(pref.getString("id", null));
+            } else {
+                Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
+                startMainActivity();
+            }
+        }else {
+            name = myDB.getStoreName(pref.getString("id", null));
+            barcode = myDB.getStoreBarcode(pref.getString("id", null));
+            logo = myDB.getStoreLogo(pref.getString("id", null));
         }
     }
 
@@ -114,19 +133,28 @@ public class ShowBarcodeActivity extends AppCompatActivity {
                 int width, height;
                 width = 800;
                 height = 1000;
-                BitMatrix matrix = writer.encode(barcode, BarcodeFormat.CODE_128, width, height);
-                BarcodeEncoder encoder = new BarcodeEncoder();
-                Bitmap bitmap = encoder.createBitmap(matrix);
-                barcode_imageView.setImageBitmap(bitmap);
-                barcode_text.setText(barcode);
-                barcode_text.setTextColor(R.color.black);
+                if(barcode.equals("")){
+                    barcode = "BARCODE MISSING";
+                    barcode_imageView.setImageResource(R.drawable.ic_qr_code);
+                }else {
+                    BitMatrix matrix = writer.encode(barcode, BarcodeFormat.CODE_128, width, height);
+                    BarcodeEncoder encoder = new BarcodeEncoder();
+                    Bitmap bitmap = encoder.createBitmap(matrix);
+                    barcode_imageView.setImageBitmap(bitmap);
+                    barcode_text.setText(barcode);
+                    barcode_text.setTextColor(R.color.black);
+                }
             } catch (WriterException e) {
                 e.printStackTrace();
             }
         } else {
+            barcode_imageView.setImageResource(R.drawable.ic_qr_code);
             barcode_text.setTextColor(R.color.gray);
             barcode_text.setText("BARCODE MISSING");
-            //TODO Do something
+        }
+        if (barcode_text.getText().length() > 12) {
+            float textSize = (float) (12.0 / (float) barcode_text.getText().length());
+            barcode_text.setTextScaleX(textSize);
         }
     }
 
