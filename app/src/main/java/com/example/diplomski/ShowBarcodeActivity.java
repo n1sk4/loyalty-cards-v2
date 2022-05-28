@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,8 +28,6 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
-import java.util.Objects;
 
 public class ShowBarcodeActivity extends AppCompatActivity {
 
@@ -74,33 +73,17 @@ public class ShowBarcodeActivity extends AppCompatActivity {
 
         animateBarcode();
 
-        barcode_imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (barcode == null || barcode_text.equals("BARCODE MISSING")) startUpdateActivity();
-            }
+        barcode_imageView.setOnClickListener(v -> {
+            if (barcode == null || barcode_text.getText().equals("BARCODE MISSING")) startUpdateActivity();
         });
 
-        logo_imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (logo == null) startUpdateActivity();
-            }
+        logo_imageView.setOnClickListener(v -> {
+            if (logo == null) startUpdateActivity();
         });
 
-        editData_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startUpdateActivity();
-            }
-        });
+        editData_button.setOnClickListener(v -> startUpdateActivity());
 
-        close_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startMainActivity();
-            }
-        });
+        close_button.setOnClickListener(v -> startMainActivity());
     }
 
     private void getIntentData() {
@@ -141,6 +124,8 @@ public class ShowBarcodeActivity extends AppCompatActivity {
                     BarcodeEncoder encoder = new BarcodeEncoder();
                     Bitmap bitmap = encoder.createBitmap(matrix);
                     barcode_imageView.setImageBitmap(bitmap);
+                    barcode_imageView.setColorFilter(Color.argb(255, 255, 255, 255));
+
                     barcode_text.setText(barcode);
                     barcode_text.setTextColor(R.color.black);
                 }
