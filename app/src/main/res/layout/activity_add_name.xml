@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Enter store name"
+            android:text="ADD NEW STORE"
             android:textAlignment="center"
             android:textSize="32sp"
             android:textStyle="bold"
@@ -32,22 +32,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editStoreName_AddName_EditText"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="here..."
-            android:inputType="textPersonName"
-            android:textAlignment="center"
-            android:textSize="32sp"
-            android:textStyle="bold"
+            app:startIconDrawable="@drawable/ic_edit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hint_AddName_TextView" />
+            app:layout_constraintTop_toBottomOf="@+id/hint_AddName_TextView"
+            app:helperText="Required*"
+            app:helperTextTextColor="@color/red">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter store name"
+                android:textAlignment="center" />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

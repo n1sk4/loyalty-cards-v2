@@ -6,15 +6,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 public class AddNameActivity extends AppCompatActivity {
 
     Button next_button;
     Button cancel_button;
-    EditText storeName_editText;
+    TextInputLayout storeName_textInputLayout;
 
     StoresDB myDB;
 
@@ -37,13 +43,30 @@ public class AddNameActivity extends AppCompatActivity {
 
         changeNextButtonVisibility();
 
-        storeName_editText.setOnKeyListener((v, keyCode, event) -> {
+        storeName_textInputLayout.getEditText().setOnKeyListener((v, keyCode, event) -> {
             changeNextButtonVisibility();
             return false;
         });
 
+        storeName_textInputLayout.getEditText().setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                        actionId == EditorInfo.IME_ACTION_DONE ||
+                        event != null &&
+                                event.getAction() == KeyEvent.ACTION_DOWN &&
+                                event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    if (event == null || !event.isShiftPressed()) {
+                        changeNextButtonVisibility();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
         next_button.setOnClickListener(v -> {
-            if(storeName_editText.getText().toString().trim().length() <= 0){
+            if(storeName_textInputLayout.getEditText().getText().toString().trim().length() <= 0){
                 confirmNoStoreNameDialog();
             }else{
                 if(pref.getString("id", null) == null){
@@ -78,7 +101,7 @@ public class AddNameActivity extends AppCompatActivity {
             builder.setTitle("Exit");
             builder.setMessage("Are you sure you want to cancel new loyalty card input?");
             builder.setPositiveButton("Yes", (dialog, which) -> {
-                if (storeName_editText.getText().length() > 0) {
+                if (storeName_textInputLayout.getEditText().getText().length() > 0) {
                     discardOrSaveDataDialog();
                 }
                 else {
@@ -95,7 +118,7 @@ public class AddNameActivity extends AppCompatActivity {
         builder.setMessage("Do you want to save or discard input data?");
         builder.setPositiveButton("Save", (dialog, which) ->{
             if(myDB.getStoreName(pref.getString("id", null)) == null){
-                myDB.addStoreName(storeName_editText.getText().toString().trim());
+                myDB.addStoreName(storeName_textInputLayout.getEditText().getText().toString().trim());
             }
             startMainActivity();
         });
@@ -124,30 +147,30 @@ public class AddNameActivity extends AppCompatActivity {
     private void findViews(){
         next_button = findViewById(R.id.next_AddName_Button);
         cancel_button = findViewById(R.id.cancel_AddName_Button);
-        storeName_editText = findViewById(R.id.editStoreName_AddName_EditText);
+        storeName_textInputLayout = findViewById(R.id.editStoreName_AddName_EditText);
     }
 
     private void storeNameToDatabase(){
-        if(storeName_editText.getText().toString().length() <= 0){
-            storeName_editText.setError("Store name field cannot be empty!");
+        if(storeName_textInputLayout.getEditText().getText().toString().length() <= 0){
+            storeName_textInputLayout.setError("Store name field cannot be empty!");
             Toast.makeText(AddNameActivity.this,
                     "Store name field cannot be empty!", Toast.LENGTH_SHORT).show();
         }else{
             editor.putString("id",
                     Long.toString(myDB.addStoreName(
-                            storeName_editText.getText().toString().trim())));
+                            storeName_textInputLayout.getEditText().getText().toString().trim())));
             editor.commit();
         }
     }
 
     private void getIntentData(){
         if(pref.getString("id", null) != null){
-            storeName_editText.setText(myDB.getStoreName(pref.getString("id", null)));
+            storeName_textInputLayout.getEditText().setText(myDB.getStoreName(pref.getString("id", null)));
         }
     }
 
     private void changeNextButtonVisibility(){
-        if(storeName_editText.getText().length() <= 0){
+        if(storeName_textInputLayout.getEditText().getText().length() <= 0){
             next_button.setVisibility(Button.GONE);
         }else{
             next_button.setVisibility(Button.VISIBLE);

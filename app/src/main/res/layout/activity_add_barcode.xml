@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/barcodePreview_AddBarcode_ImageView"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="180dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
@@ -57,23 +57,28 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:text="Generate"
+            app:layout_constraintBottom_toBottomOf="@+id/barcodeInput_AddBarcode_editText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/barcodeInput_AddBarcode_editText"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
-            android:layout_height="49dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="Enter barcode manually..."
-            android:importantForAutofill="no"
-            android:inputType="number"
+            android:layout_marginEnd="32dp"
             app:layout_constraintEnd_toStartOf="@+id/generateBarcode_AddBarcode_Button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter barcode"
+                android:textAlignment="center" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/switchHint_AddBarcode_TextView"
@@ -108,7 +113,6 @@
             android:text="Capture image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

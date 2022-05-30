@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
@@ -45,7 +46,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
     Button next_button;
     Button generate_button;
     Button back_button;
-    EditText barcodeNumber_editText;
+    TextInputLayout barcodeNumber_editText;
     TextView barcode_textView;
     ImageView barcode_imageView;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
@@ -82,7 +83,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
         });
 
         next_button.setOnClickListener(v -> {
-            if(barcodeNumber_editText.getText().length() <= 0){
+            if(barcodeNumber_editText.getEditText().getText().length() <= 0){
                 confirmNoBarcodeDialog();
             }
             else{
@@ -108,12 +109,12 @@ public class AddBarcodeActivity extends AppCompatActivity {
     }
 
     private void generateBarcodeImage(){
-        if(barcodeNumber_editText.getText().toString().trim().length() <= 0) {
+        if(barcodeNumber_editText.getEditText().getText().toString().trim().length() <= 0) {
             barcodeNumber_editText.setError("Enter barcode manually field cannot be empty!");
             Toast.makeText(AddBarcodeActivity.this,
                     "Enter barcode manually field cannot be empty!", Toast.LENGTH_SHORT).show();
         }
-        else if(barcodeNumber_editText.getText().toString().trim().length() != 12
+        else if(barcodeNumber_editText.getEditText().getText().toString().trim().length() != 12
                 && !switchSelection){
             Toast.makeText(AddBarcodeActivity.this,
                     "Barcode must be 12 numbers long!", Toast.LENGTH_SHORT).show();
@@ -122,13 +123,13 @@ public class AddBarcodeActivity extends AppCompatActivity {
             MultiFormatWriter writer = new MultiFormatWriter();
             try {
                 if (switchSelection) {
-                    BitMatrix matrix = writer.encode(barcodeNumber_editText.getText().toString()
+                    BitMatrix matrix = writer.encode(barcodeNumber_editText.getEditText().getText().toString()
                             .trim(), BarcodeFormat.QR_CODE, 350, 350);
                     BarcodeEncoder encoder = new BarcodeEncoder();
                     Bitmap bitmap = encoder.createBitmap(matrix);
                     barcode_imageView.setImageBitmap(bitmap);
                 } else {
-                    BitMatrix matrix = writer.encode(barcodeNumber_editText.getText().toString()
+                    BitMatrix matrix = writer.encode(barcodeNumber_editText.getEditText().getText().toString()
                             .trim(), BarcodeFormat.CODE_128, 500, 350);
                     BarcodeEncoder encoder = new BarcodeEncoder();
                     Bitmap bitmap = encoder.createBitmap(matrix);
@@ -213,7 +214,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
                         String returnValue = barcode.getDisplayValue();
                         Toast.makeText(AddBarcodeActivity.this, rawValue,
                                 Toast.LENGTH_SHORT).show();
-                        barcodeNumber_editText.setText(returnValue);
+                        barcodeNumber_editText.getEditText().setText(returnValue);
                     }
                 }).addOnFailureListener(e -> Toast.makeText(AddBarcodeActivity.this,
                         "Barcode not recognized!", Toast.LENGTH_SHORT).show());
@@ -257,13 +258,13 @@ public class AddBarcodeActivity extends AppCompatActivity {
     private void getIntentData(){
         if(pref.getString("id", null) != null) {
             if (myDB.getStoreBarcode(pref.getString("id", null)) != null) {
-                barcodeNumber_editText.setText(myDB.getStoreBarcode(pref.getString("id", null)));
+                barcodeNumber_editText.getEditText().setText(myDB.getStoreBarcode(pref.getString("id", null)));
             }
         }
     }
 
     private void storeBarcodeToDatabase(){
-        barcodeNumber = barcodeNumber_editText.getText().toString().trim();
+        barcodeNumber = barcodeNumber_editText.getEditText().getText().toString().trim();
         if(pref.getString("id", null) == null) {
             Toast.makeText(AddBarcodeActivity.this,
                     "You are missing store name!", Toast.LENGTH_SHORT).show();

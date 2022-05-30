@@ -41,30 +41,18 @@ public class MainActivity extends AppCompatActivity {
     CustomAdapter customAdapter;
 
     SharedPreferences prefAddNewStore;
-    SharedPreferences.Editor prefEditor;
     SharedPreferences prefShowBarcode;
-
     SharedPreferences prefRecyclerView;
-    SharedPreferences.Editor editorRecyclerView;
+    SharedPreferences.Editor prefEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Shared preferences only for resetting Add New ID
-        prefAddNewStore = getApplicationContext().
-                getSharedPreferences("store_id", MODE_PRIVATE);
-        prefEditor = prefAddNewStore.edit();
-        prefEditor.clear();
-        prefEditor.commit();
-        prefShowBarcode = getApplicationContext().
-                getSharedPreferences("store_id_barcode", MODE_PRIVATE);
-        prefEditor = prefShowBarcode.edit();
-        prefEditor.clear();
-        prefEditor.commit();
+        clearSharedPreferences();
 
-        prefAddNewStore = getApplicationContext().
+        prefRecyclerView = getApplicationContext().
                 getSharedPreferences("recycler_id", MODE_PRIVATE);
         prefEditor = prefAddNewStore.edit();
 
@@ -196,5 +184,19 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, AddNameActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    private void clearSharedPreferences(){
+        //Shared preferences only for resetting Add New ID & ShowBarcode
+        prefAddNewStore = getApplicationContext().
+                getSharedPreferences("store_id", MODE_PRIVATE);
+        prefEditor = prefAddNewStore.edit();
+        prefEditor.clear();
+        prefEditor.commit();
+        prefShowBarcode = getApplicationContext().
+                getSharedPreferences("store_id_barcode", MODE_PRIVATE);
+        prefEditor = prefShowBarcode.edit();
+        prefEditor.clear();
+        prefEditor.commit();
     }
 }

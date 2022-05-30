@@ -15,7 +15,7 @@
         <entry key="..\:/_diplomskiRad/app/src/main/res/drawable/nav.xml" value="0.1" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/font/app_fonts.xml" value="0.3958333333333333" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add.xml" value="0.25" />
-        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add_barcode.xml" value="0.36666666666666664" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add_barcode.xml" value="0.2727272727272727" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add_logo.xml" value="0.36666666666666664" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_add_name.xml" value="0.36666666666666664" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/activity_barcode.xml" value="0.36666666666666664" />
@@ -29,7 +29,7 @@
         <entry key="..\:/_diplomskiRad/app/src/main/res/layout/my_toast.xml" value="0.25" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/menu/add_new_item_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/menu/barcode_activity_menu.xml" value="0.36666666666666664" />
-        <entry key="..\:/_diplomskiRad/app/src/main/res/menu/main_activity_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/_diplomskiRad/app/src/main/res/menu/main_activity_menu.xml" value="0.12698412698412698" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/menu/update_activity_menu.xml" value="0.365625" />
         <entry key="..\:/_diplomskiRad/app/src/main/res/menu/update_item_menu.xml" value="0.2814814814814815" />
       </map>
