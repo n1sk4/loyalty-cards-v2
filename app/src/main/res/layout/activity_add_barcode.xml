@@ -53,13 +53,13 @@
         <Button
             android:id="@+id/generateBarcode_AddBarcode_Button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_height="0dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:text="Generate"
             app:layout_constraintBottom_toBottomOf="@+id/barcodeInput_AddBarcode_editText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/barcodeInput_AddBarcode_editText" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/barcodeInput_AddBarcode_editText"
@@ -71,7 +71,9 @@
             android:layout_marginEnd="32dp"
             app:layout_constraintEnd_toStartOf="@+id/generateBarcode_AddBarcode_Button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:counterEnabled="true"
+            app:counterMaxLength="12">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"

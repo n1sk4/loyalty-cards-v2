@@ -112,7 +112,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
         if(barcodeNumber_editText.getEditText().getText().toString().trim().length() <= 0) {
             barcodeNumber_editText.setError("Enter barcode manually field cannot be empty!");
             Toast.makeText(AddBarcodeActivity.this,
-                    "Enter barcode manually field cannot be empty!", Toast.LENGTH_SHORT).show();
+                    "This field can't be empty!", Toast.LENGTH_SHORT).show();
         }
         else if(barcodeNumber_editText.getEditText().getText().toString().trim().length() != 12
                 && !switchSelection){
@@ -176,6 +176,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(
                             this.getContentResolver(), resultUri);
                     getBarcodeFromImage(bitmap);
+                    generateBarcodeImage();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -269,9 +270,7 @@ public class AddBarcodeActivity extends AppCompatActivity {
             Toast.makeText(AddBarcodeActivity.this,
                     "You are missing store name!", Toast.LENGTH_SHORT).show();
         }else if(barcodeNumber.isEmpty()) {
-            Toast.makeText(this,
-                    "Barcode number is missing!", Toast.LENGTH_SHORT).show();
-            barcodeNumber_editText.setError("Barcode number is missing");
+            barcodeNumber_editText.setError("Barcode is missing");
         }else if(barcodeNumber.equals("")){
             myDB.addStoreBarcode(pref.getString("id", null), null);
         }else{

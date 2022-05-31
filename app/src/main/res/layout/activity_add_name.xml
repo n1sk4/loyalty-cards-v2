@@ -45,7 +45,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/hint_AddName_TextView"
             app:helperText="Required*"
-            app:helperTextTextColor="@color/red">
+            app:helperTextTextColor="@color/red"
+            app:counterEnabled="true"
+            app:counterMaxLength="12">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
