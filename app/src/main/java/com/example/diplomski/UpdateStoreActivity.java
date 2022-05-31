@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.palette.graphics.Palette;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -26,8 +27,8 @@ import java.io.IOException;
 
 public class UpdateStoreActivity extends AppCompatActivity {
 
-    EditText name_editText;
-    EditText barcode_editText;
+    TextInputLayout name_editText;
+    TextInputLayout barcode_editText;
     Button update_button;
     Button delete_button;
     Button back_button;
@@ -66,8 +67,8 @@ public class UpdateStoreActivity extends AppCompatActivity {
         }
 
         update_button.setOnClickListener(v -> {
-            name = name_editText.getText().toString().trim();
-            barcode = barcode_editText.getText().toString().trim();
+            name = name_editText.getEditText().getText().toString().trim();
+            barcode = barcode_editText.getEditText().getText().toString().trim();
             myDB.updateData(id, name, barcode, logo);
             ActionBar ab1 = getSupportActionBar();
             if(name != null){
@@ -99,8 +100,8 @@ public class UpdateStoreActivity extends AppCompatActivity {
             barcode = myDB.getStoreBarcode(id);
             logo = myDB.getStoreLogo(id);
 
-            name_editText.setText(name);
-            barcode_editText.setText(barcode);
+            name_editText.getEditText().setText(name);
+            barcode_editText.getEditText().setText(barcode);
             if(logo == null){
                 logo_imageView.setImageResource(R.drawable.ic_shopping_bag);
             }else{

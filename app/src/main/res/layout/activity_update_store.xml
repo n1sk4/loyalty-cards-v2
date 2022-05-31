@@ -8,34 +8,45 @@
     android:padding="30dp"
     android:id="@+id/layout_Update">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/barcodeInput_Update_EditText"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:hint="Enter barcode number"
-        android:inputType="number"
-        android:textAlignment="center"
-        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/barcodeHint_Update_textView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:startIconDrawable="@drawable/ic_qr_code">
 
-    <EditText
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Barcode number"
+            android:inputType="number"
+            android:textAlignment="center"
+            android:textSize="16sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/storeName_Update_EditText"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
-        android:ems="10"
-        android:hint="@string/enter_store_name_update"
-        android:inputType="textPersonName"
-        android:textAlignment="center"
-        android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/return_Update_Button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:startIconDrawable="@drawable/ic_edit">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Store name"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textSize="34sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/update_Update_Button"
