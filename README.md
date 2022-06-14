@@ -45,6 +45,10 @@ Empty database             |  Populated database
 :-------------------------:|:-------------------------:
 <img src="https://user-images.githubusercontent.com/92214769/173567911-34e89278-f9df-4718-b088-f9cb79c71f4e.jpg" alt="drawing" width="150"/> |  <img src="https://user-images.githubusercontent.com/92214769/173567969-eccdbc02-bddd-47ab-9207-af26871654f3.jpg" alt="drawing" width="150"/>
 
+Rearanged                  |  Show barcode
+:-------------------------:|:-------------------------:
+<img src="https://user-images.githubusercontent.com/92214769/173572687-0da79dc2-64b5-4504-a1ac-bc48fcca513a.jpg" alt="drawing" width="150"/>|  <img src="https://user-images.githubusercontent.com/92214769/173572726-26410848-9744-4260-9f35-54fbe64c347d.jpg" alt="drawing" width="150"/>
+
 Recycler view is populated in the runtime, with the data from the SQLite databse.
 Each item from the recyler view is a custom card layout that contains the store name and logo.
 If the database is empty, home screen shows an icon and text displaying that You don't have any
@@ -57,7 +61,7 @@ so you can have more frequently used cards on top of the list.
 Add new
 =======
 
-<img src="https://user-images.githubusercontent.com/92214769/173568025-fcb72178-245d-420d-ac20-cad0c73c456d.jpg" alt="drawing" width="150"/>| <img src="https://user-images.githubusercontent.com/92214769/173568105-2f79fe2a-8201-4e5c-b701-c0bc77a6be46.jpg" alt="drawing" width="150"/> | <img src="https://user-images.githubusercontent.com/92214769/173568186-25b15cc9-6afc-4373-88ad-5cb14741d753.jpg" alt="drawing" width="150"/> 
+<img src="https://user-images.githubusercontent.com/92214769/173568025-fcb72178-245d-420d-ac20-cad0c73c456d.jpg" alt="drawing" width="150"/> => <img src="https://user-images.githubusercontent.com/92214769/173568105-2f79fe2a-8201-4e5c-b701-c0bc77a6be46.jpg" alt="drawing" width="150"/> => <img src="https://user-images.githubusercontent.com/92214769/173568186-25b15cc9-6afc-4373-88ad-5cb14741d753.jpg" alt="drawing" width="150"/> 
 
 
 Add name
