@@ -41,13 +41,14 @@ Opening the app the first time will direct you to the MainActivity which contain
  * Floating Action Button
  * Menu
 
-Empty database             |  Populated database
-:-------------------------:|:-------------------------:
-<img src="https://user-images.githubusercontent.com/92214769/173567911-34e89278-f9df-4718-b088-f9cb79c71f4e.jpg" alt="drawing" width="150"/> |  <img src="https://user-images.githubusercontent.com/92214769/173567969-eccdbc02-bddd-47ab-9207-af26871654f3.jpg" alt="drawing" width="150"/>
 
-Rearanged                  |  Show barcode
-:-------------------------:|:-------------------------:
-<img src="https://user-images.githubusercontent.com/92214769/173572687-0da79dc2-64b5-4504-a1ac-bc48fcca513a.jpg" alt="drawing" width="150"/>|  <img src="https://user-images.githubusercontent.com/92214769/173572726-26410848-9744-4260-9f35-54fbe64c347d.jpg" alt="drawing" width="150"/>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/92214769/173567911-34e89278-f9df-4718-b088-f9cb79c71f4e.jpg" alt="drawing" width="150"/> __  <img src="https://user-images.githubusercontent.com/92214769/173567969-eccdbc02-bddd-47ab-9207-af26871654f3.jpg" alt="drawing" width="150"/>
+</p>
+  
+<p align="center">
+<img src="https://user-images.githubusercontent.com/92214769/173572687-0da79dc2-64b5-4504-a1ac-bc48fcca513a.jpg" alt="drawing" width="150"/> __ <img src="https://user-images.githubusercontent.com/92214769/173572726-26410848-9744-4260-9f35-54fbe64c347d.jpg" alt="drawing" width="150"/>
+</p>
 
 Recycler view is populated in the runtime, with the data from the SQLite databse.
 Each item from the recyler view is a custom card layout that contains the store name and logo.
@@ -61,7 +62,9 @@ so you can have more frequently used cards on top of the list.
 Add new
 =======
 
+<p align="center">
 <img src="https://user-images.githubusercontent.com/92214769/173568025-fcb72178-245d-420d-ac20-cad0c73c456d.jpg" alt="drawing" width="150"/> => <img src="https://user-images.githubusercontent.com/92214769/173568105-2f79fe2a-8201-4e5c-b701-c0bc77a6be46.jpg" alt="drawing" width="150"/> => <img src="https://user-images.githubusercontent.com/92214769/173568186-25b15cc9-6afc-4373-88ad-5cb14741d753.jpg" alt="drawing" width="150"/> 
+</p>
 
 
 Add name
@@ -70,10 +73,10 @@ Adding a new store is done by pressing on the add Floating Action Button, which 
 First thing You need to input is the store name, that is required to create new store. When You input the name,
 Button *NEXT* will apear, which will lead you to add barcode Activity.
 
-Blank add name             |  Name entered
-:-------------------------:|:-------------------------:
-<img src="https://user-images.githubusercontent.com/92214769/173568025-fcb72178-245d-420d-ac20-cad0c73c456d.jpg" alt="drawing" width="150"/>|  <img src="https://user-images.githubusercontent.com/92214769/173568033-658b5415-e890-4e33-9813-216635b398be.jpg" alt="drawing" width="150"/>
-
+<p align="center">
+<img src="https://user-images.githubusercontent.com/92214769/173568025-fcb72178-245d-420d-ac20-cad0c73c456d.jpg" alt="drawing" width="150"/>  <img src="https://user-images.githubusercontent.com/92214769/173568033-658b5415-e890-4e33-9813-216635b398be.jpg" alt="drawing" width="150"/>
+</p>
+  
 Add barcode
 ----------
 After adding a name, you'll be able to enter a barcode, either manually or by clicking on the *Capture image* button.
@@ -88,14 +91,14 @@ When you're done with editing the barcode, You can click *Next* button to start 
 
 *If the barcode field is empty, you will be promted a message that the barcode is missing and you can ignore the messafe or return to input the data*
 
-Blank add barcode          |  Capture image selected
-:-------------------------:|:-------------------------:
-<img src="https://user-images.githubusercontent.com/92214769/173568105-2f79fe2a-8201-4e5c-b701-c0bc77a6be46.jpg" alt="drawing" width="150"/>|  <img src="https://user-images.githubusercontent.com/92214769/173568128-6a8f7597-fe58-406f-afc0-1e44250b226c.jpg" alt="drawing" width="150"/>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/92214769/173568105-2f79fe2a-8201-4e5c-b701-c0bc77a6be46.jpg" alt="drawing" width="150"/>  <img src="https://user-images.githubusercontent.com/92214769/173568128-6a8f7597-fe58-406f-afc0-1e44250b226c.jpg" alt="drawing" width="150"/>
+</p>
 
-1D barcode selected        |  QR code selected
-:-------------------------:|:-------------------------:
-<img src="https://user-images.githubusercontent.com/92214769/173568138-81b584e9-a862-471b-9709-e795bb9321d3.jpg" alt="drawing" width="150"/>|  <img src="https://user-images.githubusercontent.com/92214769/173568153-683871c8-ca11-4332-82c5-0d59fe94b33e.jpg" alt="drawing" width="150"/>
-
+<p align="center">
+<img src="https://user-images.githubusercontent.com/92214769/173568138-81b584e9-a862-471b-9709-e795bb9321d3.jpg" alt="drawing" width="150"/>  <img src="https://user-images.githubusercontent.com/92214769/173568153-683871c8-ca11-4332-82c5-0d59fe94b33e.jpg" alt="drawing" width="150"/>
+</p>
+  
 Add logo
 --------
 Adding a logo to your store is not necessary, but it'll improve the UX. To add a store logo, You can press on *Capture image* button or click on the 
@@ -105,10 +108,10 @@ placeholder icon to open data picker of your choice.
 
 After finishing the Activity, You can either select to return to edit barcode or name data, or click *Next* button to finish the adding Activities.
 
-Blank logo                 |  Logo selected
-:-------------------------:|:-------------------------:
-<img src="https://user-images.githubusercontent.com/92214769/173568186-25b15cc9-6afc-4373-88ad-5cb14741d753.jpg" alt="drawing" width="150"/>|  <img src="https://user-images.githubusercontent.com/92214769/173568195-80da45f7-1edc-4995-801b-f2d18e6d0bf8.jpg" alt="drawing" width="150"/>
-
+<p align="center">
+<img src="https://user-images.githubusercontent.com/92214769/173568186-25b15cc9-6afc-4373-88ad-5cb14741d753.jpg" alt="drawing" width="150"/> <img src="https://user-images.githubusercontent.com/92214769/173568195-80da45f7-1edc-4995-801b-f2d18e6d0bf8.jpg" alt="drawing" width="150"/>
+</p>
+  
 Showing barcodes
 ================
 The main feature of this app is to show the barcode to the store cashier. 
