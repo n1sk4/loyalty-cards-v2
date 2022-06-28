@@ -1,4 +1,4 @@
-# diplomski
+# DIPLOMSKI RAD
 
 Loyalty cards
 ====================================
@@ -115,7 +115,9 @@ The main feature of this app is to show the barcode to the store cashier.
 You can access the store's barcode by tapping on the store item in the home screen, which will redirect You
 to the show barcode Activity. There, You'll be able to see youre store's barcode and select the option to edit the store's data.
 
+<p align="center">
 <img src="https://user-images.githubusercontent.com/92214769/173571403-0acc9da1-39c2-46cf-a206-61f39002c7cf.jpg" alt="drawing" width="150"/>
+</p>
 
 Updating store's data
 =====================
@@ -126,4 +128,6 @@ After You're done with editing, just click the *Update* button, and the Activity
 Button *Delete* is used to permanently delete the store from the database, after clicking on this button, the store will be deleted and You'll
 be redirected to the Home Activity.
 
-<img src="https://user-images.githubusercontent.com/92214769/173572131-0b05c832-e787-4bee-acfc-84cac8ffeb21.jpg" alt="drawing" width="150"/> <img src="https://user-images.githubusercontent.com/92214769/173572218-e78bd319-9b70-4dc7-b6ef-f714f43b4b85.jpg" alt="drawing" width="150"/> <img src="https://user-images.githubusercontent.com/92214769/173572245-e3ccd851-91fd-422c-95d3-8a6c31946d2b.jpg" alt="drawing" width="150"/> 
+<p align="center">
+<img src="https://user-images.githubusercontent.com/92214769/173572131-0b05c832-e787-4bee-acfc-84cac8ffeb21.jpg" alt="drawing" width="150"/> <img src="https://user-images.githubusercontent.com/92214769/173572218-e78bd319-9b70-4dc7-b6ef-f714f43b4b85.jpg" alt="drawing" width="150"/> <img src="https://user-images.githubusercontent.com/92214769/173572245-e3ccd851-91fd-422c-95d3-8a6c31946d2b.jpg" alt="drawing" width="150"/>
+</p>
