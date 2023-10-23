@@ -1,5 +1,3 @@
-# DIPLOMSKI RAD
-
 Loyalty cards
 ====================================
 About
